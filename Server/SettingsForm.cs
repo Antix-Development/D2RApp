@@ -13,14 +13,8 @@ namespace D2RServer
 {
     public partial class SettingsForm : Form
     {
-        public bool busy = false;
-
         public bool waitingForKeyPress = false;
-
         private bool nonNumberEntered = false;
-
-
-
 
         public int uId = 1;
         public D2RScript selectedScript;
@@ -50,27 +44,18 @@ namespace D2RServer
             ActionY_TextBox.KeyDown += Handle_TextBox_KeyDown;
         }
 
-
         private void SettingsForm_KeyUp(object sender, KeyEventArgs e)
         {
             //Log($"{e.KeyCode}, {e.KeyValue}");
-
             if (waitingForKeyPress)
             {
-
-
                 ActionKey_Button.Text = $"{e.KeyCode}";
-
-
                 selectedAction.aKey = e.KeyValue;
-
                 Actions_ListBox.Items[selectedAction.aId] = GetActionString();
-
                 ActionKey_Button.Enabled = true;
                 waitingForKeyPress = false;
             }
         }
-
 
         // Make it so the action delay, x, and y textboxes ONLY accept numeric input
         private void Handle_TextBox_KeyDown(object sender, KeyEventArgs e)
@@ -91,6 +76,7 @@ namespace D2RServer
                 nonNumberEntered = true;
             }
         }
+
         private void Handle_TextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (nonNumberEntered == true)
@@ -115,18 +101,14 @@ namespace D2RServer
         private void ActionX_TextBox_TextChanged(object sender, EventArgs e)
         {
             selectedAction.aX = Int16.Parse(ActionX_TextBox.Text);
-
             Actions_ListBox.Items[selectedAction.aId] = GetActionString();
         }
-
 
         private void ActionY_TextBox_TextChanged(object sender, EventArgs e)
         {
             selectedAction.aY = Int16.Parse(ActionY_TextBox.Text);
-
             Actions_ListBox.Items[selectedAction.aId] = GetActionString();
         }
-
 
         private string GetActionString()
         {

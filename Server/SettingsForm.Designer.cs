@@ -74,7 +74,7 @@ namespace D2RServer
             this.groupBox3.Controls.Add(this.ScriptUp_Button);
             this.groupBox3.Location = new System.Drawing.Point(12, 12);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(770, 351);
+            this.groupBox3.Size = new System.Drawing.Size(670, 351);
             this.groupBox3.TabIndex = 49;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Scripts";
@@ -98,7 +98,7 @@ namespace D2RServer
             this.Actions_GroupBox.Enabled = false;
             this.Actions_GroupBox.Location = new System.Drawing.Point(310, 19);
             this.Actions_GroupBox.Name = "Actions_GroupBox";
-            this.Actions_GroupBox.Size = new System.Drawing.Size(454, 324);
+            this.Actions_GroupBox.Size = new System.Drawing.Size(354, 324);
             this.Actions_GroupBox.TabIndex = 70;
             this.Actions_GroupBox.TabStop = false;
             this.Actions_GroupBox.Text = "Actions";
@@ -358,18 +358,18 @@ namespace D2RServer
             // 
             // SaveScripts_Button
             // 
-            this.SaveScripts_Button.Location = new System.Drawing.Point(425, 369);
+            this.SaveScripts_Button.Location = new System.Drawing.Point(426, 369);
             this.SaveScripts_Button.Name = "SaveScripts_Button";
-            this.SaveScripts_Button.Size = new System.Drawing.Size(120, 23);
+            this.SaveScripts_Button.Size = new System.Drawing.Size(125, 23);
             this.SaveScripts_Button.TabIndex = 50;
             this.SaveScripts_Button.Text = "Save";
             this.SaveScripts_Button.UseVisualStyleBackColor = true;
             // 
             // Cancel_Button
             // 
-            this.Cancel_Button.Location = new System.Drawing.Point(551, 369);
+            this.Cancel_Button.Location = new System.Drawing.Point(557, 369);
             this.Cancel_Button.Name = "Cancel_Button";
-            this.Cancel_Button.Size = new System.Drawing.Size(119, 23);
+            this.Cancel_Button.Size = new System.Drawing.Size(125, 23);
             this.Cancel_Button.TabIndex = 51;
             this.Cancel_Button.Text = "Cancel";
             this.Cancel_Button.UseVisualStyleBackColor = true;
@@ -388,7 +388,7 @@ namespace D2RServer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1126, 520);
+            this.ClientSize = new System.Drawing.Size(694, 520);
             this.Controls.Add(this.Log_TextBox);
             this.Controls.Add(this.Cancel_Button);
             this.Controls.Add(this.SaveScripts_Button);
