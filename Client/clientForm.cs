@@ -1,226 +1,234 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-
-using SuperSimpleTcp;
 using Newtonsoft.Json;
-using Classes;
+using Gma.System.MouseKeyHook;
 using WindowsInput.Native;
 using WindowsInput;
+using LiteNetLib;
 
-using System.Runtime.InteropServices;
 namespace D2RApp
 {
-    public class Win32
-    {
-        [DllImport("User32.Dll")]
-        public static extern long SetCursorPos(int x, int y);
-
-        [DllImport("User32.Dll")]
-        public static extern bool ClientToScreen(IntPtr hWnd, ref POINT point);
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct POINT
-        {
-            public int x;
-            public int y;
-
-            public POINT(int X, int Y)
-            {
-                x = X;
-                y = Y;
-            }
-        }
-    }
 
     public partial class client_Form : Form
     {
-        public bool currentlyDoingSomething = false;
+        public EventBasedNetListener netListener;
+        public NetManager netClient;
+
+        public bool connected;
+
+        public bool scriptRunning;
 
         public InputSimulator inputSimulator;
+
+        public IKeyboardMouseEvents m_GlobalHook;
 
         public int screenWidth;
         public int screenHeight;
 
-
+        // Windows Form initialisation
         public client_Form()
         {
             InitializeComponent();
 
             Rectangle resolution = Screen.PrimaryScreen.Bounds;
-            screenWidth = resolution.Width;
-            screenHeight = resolution.Height;
+            screenWidth = resolution.Width - 1;
+            screenHeight = resolution.Height - 1;
         }
-
-        SimpleTcpClient client;
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            client = new SimpleTcpClient(ServerIP_TextBox.Text);
+            // Start intercepting input events
+            m_GlobalHook = Hook.GlobalEvents();
+            m_GlobalHook.MouseMove += M_GlobalHook_MouseMove;
 
-            client.Events.Connected += Events_Connected;
-            client.Events.DataReceived += Events_DataReceived;
-            client.Events.Disconnected += Events_Disconnected;
-
+            // Start inpute event simulation
             inputSimulator = new InputSimulator();
+
+            connected = false;
+
+            // Start client
+            netListener = new EventBasedNetListener();
+            netClient = new NetManager(netListener);
+            netClient.Start();
+            netListener.PeerConnectedEvent += NetListener_PeerConnectedEvent;
+            netListener.PeerDisconnectedEvent += NetListener_PeerDisconnectedEvent;
+            netListener.NetworkReceiveEvent += NetListener_NetworkReceiveEvent;
+            timer1.Enabled = true;
+
+            scriptRunning = false;
+        }
+
+        // Update mouse position readout
+        private void M_GlobalHook_MouseMove(object sender, MouseEventArgs e)
+        {
+            MousePosition_Label.Text = $"{Clamp(e.X, 0, screenWidth)}, {Clamp(e.Y, 0, screenHeight)}";
+        }
+
+        // Application shut-down
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Stop client
+            timer1.Enabled = false;
+            netListener.PeerConnectedEvent -= NetListener_PeerConnectedEvent;
+            netListener.PeerDisconnectedEvent -= NetListener_PeerDisconnectedEvent;
+            netListener.NetworkReceiveEvent -= NetListener_NetworkReceiveEvent;
+            netClient.Stop();
+        }
+        // Perform client polling stuff
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            netClient.PollEvents();
+        }
+
+        // A message was received from the server
+        private void NetListener_NetworkReceiveEvent(NetPeer peer, NetPacketReader reader, DeliveryMethod deliveryMethod)
+        {
+            string data = reader.GetString(50); // Max data length
+            reader.Recycle();
+
+            //            Log($"Server: {data}"); // Max length of string
+
+            string[] parts = data.Split(',');
+
+            switch (parts[0])
+            {
+                // 
+                // MouseMove
+                // 
+
+                case "1":
+                    //inputSimulator.Mouse.MoveMouseTo(Clamp(Int16.Parse(parts[1]), 0, screenWidth) * 65535 / (screenWidth + 1), Clamp(Int16.Parse(parts[2]), 0, screenHeight) * 65535 / (screenHeight + 1));
+
+                    int x = Clamp(Int32.Parse(parts[1]), 0, screenWidth);
+                    int y = Clamp(Int32.Parse(parts[2]), 0, screenHeight);
+                    inputSimulator.Mouse.MoveMouseTo(x * 65535 / (screenWidth + 1), y * 65535 / (screenHeight + 1));
+
+                    MousePosition_Label.Text = $"{x}, {y}";
+
+                    break;
+
+                // 
+                // MouseClick
+                // 
+
+                case "2":
+                    if (parts[1] == "1")
+                    {
+                        inputSimulator.Mouse.LeftButtonClick();
+                    }
+                    else
+                    {
+                        inputSimulator.Mouse.RightButtonClick();
+                    }
+
+                    break;
+
+                // 
+                // KeyPress
+                // 
+
+                case "3":
+                    inputSimulator.Keyboard.KeyPress((VirtualKeyCode)Int16.Parse(parts[1]));
+                    break;
+
+                // 
+                // Scripted action
+                //
+
+                case "4":
+                    // TODO:
+                    break;
+
+                default:
+                    break;
+            }
+
+/*
+            try
+            {
+                int[] msg = JsonConvert.DeserializeObject<int[]>(data);
+
+                switch (msg[0])
+                {
+                    case 0: // TODO: ping received
+
+                        break;
+
+                    case 1: // MouseMove
+                        inputSimulator.Mouse.MoveMouseTo(msg[1] * 65535 / screenWidth, msg[2] * 65535 / screenHeight);
+                        break;
+
+                    case 2: // MouseClick
+                        if (msg[1] == 1)
+                        {
+                            inputSimulator.Mouse.LeftButtonClick();
+                        }
+                        else
+                        {
+                            inputSimulator.Mouse.RightButtonClick();
+                        }
+                        break;
+
+                    case 3: // KeyPress
+                        inputSimulator.Keyboard.KeyPress((VirtualKeyCode)msg[1]);
+
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log(ex.Message);
+            }
+*/
+
+        }
+
+        // Established connection to server
+        private void NetListener_PeerConnectedEvent(NetPeer peer)
+        {
+            connected = true;
+            Connection_Button.Text = "Disconnect";
+
+            Log($"Connected to {peer.EndPoint} at {TimeStamp()}.");
+        }
+
+        // Lost connection to server
+        private void NetListener_PeerDisconnectedEvent(NetPeer peer, DisconnectInfo disconnectInfo)
+        {
+            Connection_Button.Text = "Connect";
+            connected = false;
+
+            Log($"Disconnected from {peer.EndPoint} at {TimeStamp()}.");
         }
 
         // Attempt to disconnect from the server if already connected, otherwise attempt to connect to the server
         private void ConnectionButton_Click(object sender, EventArgs e)
         {
-            if (client.IsConnected)
+            if (connected)
             {
-                this.Invoke((MethodInvoker)delegate
-                {
-                    Task.Run(() => client.Disconnect()); // Attempt to disconnect from server
-                    
-                    // client.Disconnect(); // Attempt to disconnect from server
-                });
-            }
-            else
+                Log("TODO: initiate a manual disconnect?");
+
+            } else
             {
                 try
                 {
-                    client.Connect(); // Attempt to connect to server
+                    netClient.Connect(ServerIP_TextBox.Text, Int32.Parse(ServerPort_TextBox.Text), "D2RApp"); // Host, port, key
                 }
-
                 catch (Exception ex)
                 {
-                    Log(ex.Message); // Generally the server is not running on the computer at the given IP Address
+                    Log(ex.Message); // Server could not be reached
                 }
             }
-
         }
 
-        // A connection was established with the server
-        private void Events_Connected(object sender, ConnectionEventArgs e)
+        // Constrain given value to given range
+        public int Clamp(int value, int min, int max)
         {
-            Connection_Button.Text = "Disconnect";
-            Log($"Connected to {e.IpPort} at {TimeStamp()}.");
-        }
-
-        // The client was disconnected from the server
-        private void Events_Disconnected(object sender, ConnectionEventArgs e)
-        {
-            this.Invoke((MethodInvoker)delegate
-            {
-                Connection_Button.Text = "Connect";
-                Log($"Disconnected from {e.IpPort} at {TimeStamp()}.");
-            });
-        }
-
-        // A message was received from the server
-        private void Events_DataReceived(object sender, DataReceivedEventArgs e)
-        {
-            this.Invoke((MethodInvoker)delegate
-            {
-                if (e.Data.Array != null)
-                {
-                    string data = Encoding.UTF8.GetString(e.Data.Array, 0, e.Data.Count); // Get the data
-
-                    //Log($"Received data: {data}");
-
-                    try
-                    {
-                        int[] msg = JsonConvert.DeserializeObject<int[]>(data);
-
-                        switch (msg[0])
-                        {
-                            case 0: // TODO: ping received
-
-                                break;
-
-                            case 1: // MouseMove
-                                inputSimulator.Mouse.MoveMouseTo(msg[1] * 65535 / screenWidth, msg[2] * 65535 / screenWidth);
-                                break;
-
-                            case 2: // MouseClick
-                                if (msg[1] == 1)
-                                {
-                                    inputSimulator.Mouse.LeftButtonClick();
-                                }
-                                else
-                                {
-                                    inputSimulator.Mouse.RightButtonClick();
-                                }
-                                break;
-
-                            case 3: // KeyPress
-                                inputSimulator.Keyboard.KeyPress((VirtualKeyCode)msg[1]);
-
-                                break;
-
-                            default:
-                                break;
-                        }
-
-                        //ServerMessage serverMessage = JsonConvert.DeserializeObject<ServerMessage>(data); // Decode the string into a ServerMessage
-
-                        //switch (serverMessage.mType) // Process according to the message type
-                        //{
-                        //    case "mousemove":
-
-                        //        MouseMoveMessage mouseMoveMessage = JsonConvert.DeserializeObject<MouseMoveMessage>(serverMessage.mData);
-
-                        //        MousePosition_Label.Text = $"{mouseMoveMessage.mX}, {mouseMoveMessage.mY}";
-
-                        //        //inputSimulator.Mouse.MoveMouseTo(mouseMoveMessage.mX * 65535 / screenWidth, mouseMoveMessage.mY * 65535 / screenWidth);
-
-                        //        //Win32.POINT p = new Win32.POINT(mouseMoveMessage.mX, mouseMoveMessage.mY);
-                        //        //Win32.ClientToScreen(this.Handle, ref p);
-                        //        //Win32.SetCursorPos(mouseMoveMessage.mX, mouseMoveMessage.mY);
-
-                        //        break;
-
-                        //    case "mouseclick":
-                        //        MouseClickMessage mouseClickMessage = JsonConvert.DeserializeObject<MouseClickMessage>(serverMessage.mData);
-                        //        MouseButtons mouseButtons = (MouseButtons)mouseClickMessage.mButton;
-                        //        switch (mouseButtons)
-                        //        {
-                        //            case MouseButtons.Left:
-                        //                inputSimulator.Mouse.LeftButtonClick();
-                        //                break;
-                        //            case MouseButtons.Right:
-                        //                inputSimulator.Mouse.RightButtonClick();
-                        //                break;
-                        //            default:
-                        //                // All other buttons are ignored
-                        //                break;
-                        //        }
-                        //        break;
-
-                        //    case "keyup":
-                        //        KeyUpMessage keyUpMessage = JsonConvert.DeserializeObject<KeyUpMessage>(serverMessage.mData);
-
-                        //        VirtualKeyCode virtualKeyCode = (VirtualKeyCode)keyUpMessage.mKeyValue; // Cast from int to VirtualKeyCode
-
-                        //        inputSimulator.Keyboard.KeyPress(virtualKeyCode);
-
-                        //        break;
-
-                        //    default:
-                        //        Log($"Received unknown message of type '{serverMessage.mType}' from {e.IpPort.ToString()}.");
-                        //        break;
-                        //}
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Log(ex.Message);
-                    }
-
-                }
-                else
-                {
-                    Log($"Received null data from {e.IpPort}... discarding.");
-                }
-            });
+            return (value < min) ? min : (value > max) ? max : value;
         }
 
         // Get the current system date and time as a string
