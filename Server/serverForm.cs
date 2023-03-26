@@ -1,15 +1,16 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Windows.Forms;
 using System.IO;
-using Classes;
+
 using Gma.System.MouseKeyHook;
 using LiteNetLib;
 using LiteNetLib.Utils;
 using Newtonsoft.Json;
+
+using Classes;
 
 namespace D2RServer
 {
@@ -23,7 +24,7 @@ namespace D2RServer
 
         public static List<D2RScript> tempScripts;
 
-        public SettingsForm settingsForm;
+        public ScriptEditor settingsForm;
 
         public string IPAddress;
         public int port = 9000;
@@ -65,59 +66,33 @@ namespace D2RServer
         // Application start-up
         private void Form1_Load(object sender, EventArgs e)
         {
-            scripts = new List<D2RScript>();
-
-
-            //D2RScript script = new D2RScript($"new1");
-            //script.sId = 1;
-            //scripts.Add(script);
-            //string jsonString = JsonConvert.SerializeObject(scripts);
-            //Log($"{jsonString}");
-            //scripts = JsonConvert.DeserializeObject<List<D2RScript>>(jsonString);
-            //for (int i = 0; i < scripts.Count; i++)
-            //{
-            //    var s = (D2RScript)scripts[i];
-            //    Log($"{s.sId}, {s.sName}");
-            //}
-
-
-
-            Log(File.Exists(D2RConstants.ScriptFileName) ? "File exists." : "File does not exist.");
+            scripts = new List<D2RScript>(); // Create empty list of scripts
 
             if (File.Exists(D2RConstants.ScriptFileName))
             {
-                // Load file
-                string scriptFile = File.ReadAllText(D2RConstants.ScriptFileName);
-
-                scripts = JsonConvert.DeserializeObject<List<D2RScript>>(scriptFile);
-
-
-
+                string scriptFile = File.ReadAllText(D2RConstants.ScriptFileName); // Load json file
+                scripts = JsonConvert.DeserializeObject<List<D2RScript>>(scriptFile); // Recreate scripts list
 
                 Log($"Loaded scripts ({scripts.Count})");
 
+                scripts.Sort((a, b) => a.sId.CompareTo(b.sId)); // sort to ascending order
+
                 for (int i = 0; i < scripts.Count; i++)
                 {
-                    var s = (D2RScript)scripts[i];
-                    Log($"{s.sId}, {s.sName}, {s.sActions}");
+                    var s = (D2RScript)scripts[i]; // Next script
+                    Log($"sId:{s.sId}, {s.sName}");
+
+                    s.sActions.Sort((a, b) => a.aId.CompareTo(b.aId)); // sort into ascending order
+
+                    for (int j = 0; j < s.sActions.Count; j++)
+                    {
+                        var a = (D2RScriptedAction)s.sActions[j]; // Next action
+                        Log($"aId:{a.aId}");
+                    }
                 }
-
-
-                // scripts = JsonConvert.DeserializeObject<D2RScript[]>(scriptFile);
-
-                //ArrayList actualScripts = new ArrayList();
-
-                //for (int i = 0; i < scripts.Count; i++)
-                //{
-                //    var encodedScript = scripts[i];
-                //    Log($"{encodedScript.GetType()}");
-
-                //    //D2RScript decodedScript = JsonConvert.DeserializeObject(encodedScript);
-
-                //}
             }
 
-            settingsForm = new SettingsForm();
+            settingsForm = new ScriptEditor(); // Create new instance of script editor window
 
             // Start server
             netListener = new EventBasedNetListener();

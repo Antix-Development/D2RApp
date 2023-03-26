@@ -69,7 +69,8 @@ namespace D2RServer
             this.Log_TextBox.ReadOnly = true;
             this.Log_TextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.Log_TextBox.Size = new System.Drawing.Size(425, 133);
-            this.Log_TextBox.TabIndex = 9;
+            this.Log_TextBox.TabIndex = 0;
+            this.Log_TextBox.TabStop = false;
             // 
             // Settings_Button
             // 

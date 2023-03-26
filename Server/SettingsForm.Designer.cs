@@ -1,7 +1,7 @@
 ﻿
 namespace D2RServer
 {
-    partial class SettingsForm
+    partial class ScriptEditor
     {
         /// <summary>
         /// Required designer variable.
@@ -57,7 +57,6 @@ namespace D2RServer
             this.ScriptUp_Button = new System.Windows.Forms.Button();
             this.Accept_Button = new System.Windows.Forms.Button();
             this.Cancel_Button = new System.Windows.Forms.Button();
-            this.Log_TextBox = new System.Windows.Forms.TextBox();
             this.groupBox3.SuspendLayout();
             this.Actions_GroupBox.SuspendLayout();
             this.ActionType_GroupBox.SuspendLayout();
@@ -109,7 +108,7 @@ namespace D2RServer
             this.ActionX_TextBox.Location = new System.Drawing.Point(118, 295);
             this.ActionX_TextBox.Name = "ActionX_TextBox";
             this.ActionX_TextBox.Size = new System.Drawing.Size(45, 20);
-            this.ActionX_TextBox.TabIndex = 76;
+            this.ActionX_TextBox.TabIndex = 113;
             this.ActionX_TextBox.Text = "0";
             this.ActionX_TextBox.TextChanged += new System.EventHandler(this.ActionX_TextBox_TextChanged);
             // 
@@ -119,7 +118,7 @@ namespace D2RServer
             this.ActionDown_Button.Location = new System.Drawing.Point(267, 211);
             this.ActionDown_Button.Name = "ActionDown_Button";
             this.ActionDown_Button.Size = new System.Drawing.Size(81, 23);
-            this.ActionDown_Button.TabIndex = 60;
+            this.ActionDown_Button.TabIndex = 110;
             this.ActionDown_Button.Text = "Down";
             this.ActionDown_Button.UseVisualStyleBackColor = true;
             this.ActionDown_Button.Click += new System.EventHandler(this.ActionDown_Button_Click);
@@ -130,7 +129,7 @@ namespace D2RServer
             this.ActionKey_Button.Location = new System.Drawing.Point(271, 293);
             this.ActionKey_Button.Name = "ActionKey_Button";
             this.ActionKey_Button.Size = new System.Drawing.Size(77, 23);
-            this.ActionKey_Button.TabIndex = 76;
+            this.ActionKey_Button.TabIndex = 115;
             this.ActionKey_Button.Text = "Set Key";
             this.ActionKey_Button.UseVisualStyleBackColor = true;
             this.ActionKey_Button.Click += new System.EventHandler(this.ActionKey_Button_Click);
@@ -141,7 +140,7 @@ namespace D2RServer
             this.ActionUp_Button.Location = new System.Drawing.Point(180, 211);
             this.ActionUp_Button.Name = "ActionUp_Button";
             this.ActionUp_Button.Size = new System.Drawing.Size(81, 23);
-            this.ActionUp_Button.TabIndex = 59;
+            this.ActionUp_Button.TabIndex = 109;
             this.ActionUp_Button.Text = "Up";
             this.ActionUp_Button.UseVisualStyleBackColor = true;
             this.ActionUp_Button.Click += new System.EventHandler(this.ActionUp_Button_Click);
@@ -152,7 +151,7 @@ namespace D2RServer
             this.ActionY_TextBox.Location = new System.Drawing.Point(189, 295);
             this.ActionY_TextBox.Name = "ActionY_TextBox";
             this.ActionY_TextBox.Size = new System.Drawing.Size(45, 20);
-            this.ActionY_TextBox.TabIndex = 73;
+            this.ActionY_TextBox.TabIndex = 114;
             this.ActionY_TextBox.Text = "0";
             this.ActionY_TextBox.TextChanged += new System.EventHandler(this.ActionY_TextBox_TextChanged);
             // 
@@ -163,7 +162,7 @@ namespace D2RServer
             this.DeleteAction_Button.Location = new System.Drawing.Point(93, 211);
             this.DeleteAction_Button.Name = "DeleteAction_Button";
             this.DeleteAction_Button.Size = new System.Drawing.Size(81, 23);
-            this.DeleteAction_Button.TabIndex = 58;
+            this.DeleteAction_Button.TabIndex = 108;
             this.DeleteAction_Button.Text = "Delete";
             this.DeleteAction_Button.UseVisualStyleBackColor = true;
             this.DeleteAction_Button.Click += new System.EventHandler(this.DeleteAction_Button_Click);
@@ -174,7 +173,7 @@ namespace D2RServer
             this.ActionDelay_TextBox.Location = new System.Drawing.Point(47, 295);
             this.ActionDelay_TextBox.Name = "ActionDelay_TextBox";
             this.ActionDelay_TextBox.Size = new System.Drawing.Size(45, 20);
-            this.ActionDelay_TextBox.TabIndex = 74;
+            this.ActionDelay_TextBox.TabIndex = 112;
             this.ActionDelay_TextBox.TextChanged += new System.EventHandler(this.ActionDelay_TextBox_TextChanged);
             // 
             // Actions_ListBox
@@ -184,7 +183,7 @@ namespace D2RServer
             this.Actions_ListBox.Name = "Actions_ListBox";
             this.Actions_ListBox.ScrollAlwaysVisible = true;
             this.Actions_ListBox.Size = new System.Drawing.Size(342, 186);
-            this.Actions_ListBox.TabIndex = 56;
+            this.Actions_ListBox.TabIndex = 106;
             this.Actions_ListBox.SelectedIndexChanged += new System.EventHandler(this.Actions_ListBox_SelectedIndexChanged);
             // 
             // ActionType_GroupBox
@@ -197,7 +196,7 @@ namespace D2RServer
             this.ActionType_GroupBox.Location = new System.Drawing.Point(6, 240);
             this.ActionType_GroupBox.Name = "ActionType_GroupBox";
             this.ActionType_GroupBox.Size = new System.Drawing.Size(342, 49);
-            this.ActionType_GroupBox.TabIndex = 69;
+            this.ActionType_GroupBox.TabIndex = 111;
             this.ActionType_GroupBox.TabStop = false;
             this.ActionType_GroupBox.Text = "Type";
             // 
@@ -263,8 +262,8 @@ namespace D2RServer
             this.NewAction_Button.Location = new System.Drawing.Point(6, 211);
             this.NewAction_Button.Name = "NewAction_Button";
             this.NewAction_Button.Size = new System.Drawing.Size(81, 23);
-            this.NewAction_Button.TabIndex = 50;
-            this.NewAction_Button.Text = "Add";
+            this.NewAction_Button.TabIndex = 107;
+            this.NewAction_Button.Text = "New Action";
             this.NewAction_Button.UseVisualStyleBackColor = true;
             this.NewAction_Button.Click += new System.EventHandler(this.NewAction_Button_Click);
             // 
@@ -301,7 +300,7 @@ namespace D2RServer
             this.ScriptDown_Button.Location = new System.Drawing.Point(234, 294);
             this.ScriptDown_Button.Name = "ScriptDown_Button";
             this.ScriptDown_Button.Size = new System.Drawing.Size(70, 23);
-            this.ScriptDown_Button.TabIndex = 72;
+            this.ScriptDown_Button.TabIndex = 104;
             this.ScriptDown_Button.Text = "Down";
             this.ScriptDown_Button.UseVisualStyleBackColor = true;
             this.ScriptDown_Button.Click += new System.EventHandler(this.ScriptDown_Button_Click);
@@ -313,7 +312,7 @@ namespace D2RServer
             this.Scripts_ListBox.Name = "Scripts_ListBox";
             this.Scripts_ListBox.ScrollAlwaysVisible = true;
             this.Scripts_ListBox.Size = new System.Drawing.Size(298, 251);
-            this.Scripts_ListBox.TabIndex = 55;
+            this.Scripts_ListBox.TabIndex = 100;
             this.Scripts_ListBox.SelectedIndexChanged += new System.EventHandler(this.Scripts_ListBox_SelectedIndexChanged);
             // 
             // DeleteScript_Button
@@ -322,7 +321,7 @@ namespace D2RServer
             this.DeleteScript_Button.Location = new System.Drawing.Point(82, 294);
             this.DeleteScript_Button.Name = "DeleteScript_Button";
             this.DeleteScript_Button.Size = new System.Drawing.Size(70, 23);
-            this.DeleteScript_Button.TabIndex = 71;
+            this.DeleteScript_Button.TabIndex = 102;
             this.DeleteScript_Button.Text = "Delete";
             this.DeleteScript_Button.UseVisualStyleBackColor = true;
             this.DeleteScript_Button.Click += new System.EventHandler(this.DeleteScript_Button_Click);
@@ -332,8 +331,8 @@ namespace D2RServer
             this.NewScript_Button.Location = new System.Drawing.Point(6, 294);
             this.NewScript_Button.Name = "NewScript_Button";
             this.NewScript_Button.Size = new System.Drawing.Size(70, 23);
-            this.NewScript_Button.TabIndex = 51;
-            this.NewScript_Button.Text = "Add";
+            this.NewScript_Button.TabIndex = 101;
+            this.NewScript_Button.Text = "New Script";
             this.NewScript_Button.UseVisualStyleBackColor = true;
             this.NewScript_Button.Click += new System.EventHandler(this.NewScript_Button_Click);
             // 
@@ -343,7 +342,7 @@ namespace D2RServer
             this.ScriptName_TextBox.Location = new System.Drawing.Point(6, 323);
             this.ScriptName_TextBox.Name = "ScriptName_TextBox";
             this.ScriptName_TextBox.Size = new System.Drawing.Size(298, 20);
-            this.ScriptName_TextBox.TabIndex = 52;
+            this.ScriptName_TextBox.TabIndex = 105;
             this.ScriptName_TextBox.TextChanged += new System.EventHandler(this.ScriptName_TextBox_TextChanged);
             // 
             // ScriptUp_Button
@@ -352,7 +351,7 @@ namespace D2RServer
             this.ScriptUp_Button.Location = new System.Drawing.Point(158, 294);
             this.ScriptUp_Button.Name = "ScriptUp_Button";
             this.ScriptUp_Button.Size = new System.Drawing.Size(70, 23);
-            this.ScriptUp_Button.TabIndex = 57;
+            this.ScriptUp_Button.TabIndex = 103;
             this.ScriptUp_Button.Text = "Up";
             this.ScriptUp_Button.UseVisualStyleBackColor = true;
             this.ScriptUp_Button.Click += new System.EventHandler(this.ScriptUp_Button_Click);
@@ -362,7 +361,7 @@ namespace D2RServer
             this.Accept_Button.Location = new System.Drawing.Point(426, 369);
             this.Accept_Button.Name = "Accept_Button";
             this.Accept_Button.Size = new System.Drawing.Size(125, 23);
-            this.Accept_Button.TabIndex = 50;
+            this.Accept_Button.TabIndex = 116;
             this.Accept_Button.Text = "Save";
             this.Accept_Button.UseVisualStyleBackColor = true;
             this.Accept_Button.Click += new System.EventHandler(this.Accept_Button_Click);
@@ -373,39 +372,26 @@ namespace D2RServer
             this.Cancel_Button.Location = new System.Drawing.Point(557, 369);
             this.Cancel_Button.Name = "Cancel_Button";
             this.Cancel_Button.Size = new System.Drawing.Size(125, 23);
-            this.Cancel_Button.TabIndex = 51;
+            this.Cancel_Button.TabIndex = 117;
             this.Cancel_Button.Text = "Cancel";
             this.Cancel_Button.UseVisualStyleBackColor = true;
             // 
-            // Log_TextBox
+            // ScriptEditor
             // 
-            this.Log_TextBox.Location = new System.Drawing.Point(12, 369);
-            this.Log_TextBox.Multiline = true;
-            this.Log_TextBox.Name = "Log_TextBox";
-            this.Log_TextBox.ReadOnly = true;
-            this.Log_TextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.Log_TextBox.Size = new System.Drawing.Size(407, 137);
-            this.Log_TextBox.TabIndex = 52;
-            // 
-            // SettingsForm
-            // 
-            this.AcceptButton = this.Accept_Button;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.Cancel_Button;
-            this.ClientSize = new System.Drawing.Size(694, 520);
+            this.ClientSize = new System.Drawing.Size(694, 404);
             this.ControlBox = false;
-            this.Controls.Add(this.Log_TextBox);
             this.Controls.Add(this.Cancel_Button);
             this.Controls.Add(this.Accept_Button);
             this.Controls.Add(this.groupBox3);
             this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "SettingsForm";
+            this.Name = "ScriptEditor";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.Text = "Settings";
+            this.Text = "Script Editor";
             this.Load += new System.EventHandler(this.SettingsForm_Load);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
@@ -414,7 +400,6 @@ namespace D2RServer
             this.ActionType_GroupBox.ResumeLayout(false);
             this.ActionType_GroupBox.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -444,7 +429,6 @@ namespace D2RServer
         private System.Windows.Forms.Button DeleteScript_Button;
         private System.Windows.Forms.Button Accept_Button;
         private System.Windows.Forms.Button Cancel_Button;
-        private System.Windows.Forms.TextBox Log_TextBox;
         private System.Windows.Forms.TextBox ActionDelay_TextBox;
         private System.Windows.Forms.Button ActionKey_Button;
         private System.Windows.Forms.TextBox ActionX_TextBox;

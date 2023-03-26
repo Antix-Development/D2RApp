@@ -13,6 +13,22 @@ As well as being able to generate input events on slave computers, you can also 
 
 **need to put text about scripts here**
 
+Editing scripts...
+From the main window, click the `Edit Scripts` button to open the script editor window, then in that window..
+Click `New Script` to create a new script.
+Once it has been created you can edit its name, change its order in the script list, delete it, and add actions to it.
+Click the `Add Action to add a new action to the script.
+Once created you can change its order in the action list, delete it, and modify its various parameters.
+There are four supported types of action:
+MouseMove
+LeftClick
+RightClick
+KeyPress
+
+
+
+
+Clicking the "Accept" button on the "Settings" form, the server will broadcast all scripts to all connected clients, and also save the scripts locally in D2RApp's folder.'
 
 
 

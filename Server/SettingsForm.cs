@@ -1,52 +1,46 @@
 ﻿using System;
-using System.Collections;
-
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+
 using Classes;
 
 namespace D2RServer
 {
-    public partial class SettingsForm : Form
+    public partial class ScriptEditor : Form
     {
         public bool waitingForKeyPress = false;
         private bool nonNumberEntered = false;
+        private bool scriptListPopulated = false;
 
         public int uId = 1;
 
         public D2RScript selectedScript;
-        public D2RScript otherScript;
         public int selectedScriptIndex = -2;
 
         public D2RScriptedAction selectedAction;
-        public D2RScriptedAction otherAction;
         public int selectedActionIndex = -2;
 
-        public SettingsForm()
+        // Windows Form initialisation
+        public ScriptEditor()
         {
             InitializeComponent();
         }
 
+        // Application start-up
         private void SettingsForm_Load(object sender, EventArgs e)
         {
 
-            //Log(serverForm.scripts.ToString());
-
-            for (int i = 0; i < serverForm.scripts.Count; i++)
+            // Populate scripts list (once only)
+            if (!scriptListPopulated)
             {
+                for (int i = 0; i < serverForm.scripts.Count; i++)
+                {
+                    var script = serverForm.scripts[i];
+                    Scripts_ListBox.Items.Add(script.sName);
+                }
 
-                var script = serverForm.scripts[i];
-                //Log($"{script.GetType()}, {script.ToString()}");
-
-
-                Scripts_ListBox.Items.Add(script.sName);
-
+                scriptListPopulated = true;
             }
+
             // Install keyboard handlers
             this.KeyUp += SettingsForm_KeyUp;
 
@@ -70,7 +64,6 @@ namespace D2RServer
         // Update selected actions hotkey
         private void SettingsForm_KeyUp(object sender, KeyEventArgs e)
         {
-            //Log($"{e.KeyCode}, {e.KeyValue}");
             if (waitingForKeyPress)
             {
                 ActionKey_Button.Text = $"{e.KeyCode}";
@@ -81,7 +74,7 @@ namespace D2RServer
             }
         }
 
-        #region Actions
+        #region Action
 
         // Make it so the action delay, x, and y textboxes ONLY accept numeric input
         private void Handle_TextBox_KeyDown(object sender, KeyEventArgs e)
@@ -152,7 +145,6 @@ namespace D2RServer
             SetActioncontrols();
         }
 
-
         // Delete the selected action
         private void DeleteAction_Button_Click(object sender, EventArgs e)
         {
@@ -184,9 +176,6 @@ namespace D2RServer
             if (selectedAction != null && selectedAction.aId > 0)
             {
                 var other = GetActionWithID(selectedAction.aId - 1);
-                
-                //Log($"other:{other.aId}, {GetActionString(other)}");
-                //Log($"selected:{selectedAction.aId}, {GetActionString(selectedAction)}");
 
                 Actions_ListBox.Items[--selectedAction.aId] = ActionToString(selectedAction);
                 Actions_ListBox.Items[++other.aId] = ActionToString(other);
@@ -210,8 +199,6 @@ namespace D2RServer
                 Actions_ListBox.SelectedIndex = selectedAction.aId;
             }
         }
-
-
 
         // User changed the selected actions type to "MouseMove"
         private void MouseMove_CheckedChanged(object sender, EventArgs e)
@@ -303,7 +290,9 @@ namespace D2RServer
 
         private void Actions_ListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (Actions_ListBox.SelectedIndex != -1 && Actions_ListBox.SelectedIndex != selectedActionIndex)
+            if (Actions_ListBox.SelectedIndex == -1) return;
+
+            if (Actions_ListBox.SelectedIndex != selectedActionIndex)
             {
                 selectedAction = GetActionWithID(Actions_ListBox.SelectedIndex);
 
@@ -313,7 +302,6 @@ namespace D2RServer
 
             SetActioncontrols();
         }
-
 
         // Enable or disable action controls
         private void SetActioncontrols()
@@ -397,10 +385,9 @@ namespace D2RServer
             return null;
         }
 
-
         #endregion
 
-        #region Script Control Code
+        #region Script
 
         // Create a new script
         private void NewScript_Button_Click(object sender, EventArgs e)
@@ -487,7 +474,9 @@ namespace D2RServer
         // User clicked on a script
         private void Scripts_ListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (Scripts_ListBox.SelectedIndex != -1 && Scripts_ListBox.SelectedIndex != selectedScriptIndex)
+            if (Scripts_ListBox.SelectedIndex == -1) return;
+
+            if (Scripts_ListBox.SelectedIndex != selectedScriptIndex)
             {
                 selectedScript = GetScriptWithID(Scripts_ListBox.SelectedIndex);
                 ScriptName_TextBox.Text = Scripts_ListBox.SelectedItem.ToString();
@@ -559,18 +548,6 @@ namespace D2RServer
                 if (script.sId == id) return script;
             }
             return null;
-        }
-
-        #endregion
-
-        #region Utility
-
-        // Append the given text to the log textbox
-        private void Log(string text)
-        {
-            Log_TextBox.AppendText(text);
-            Log_TextBox.AppendText(Environment.NewLine);
-            Log_TextBox.ScrollToCaret();
         }
 
         #endregion
