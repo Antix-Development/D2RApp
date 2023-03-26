@@ -133,11 +133,19 @@ namespace D2RApp
                     break;
 
                 // 
-                // Scripted action
+                // Receive scripted actions
                 //
 
                 case "4":
-                    // TODO:
+                    // TODO: decode received string to d2rscripts
+                    break;
+
+                // 
+                // Scripted action
+                //
+
+                case "5":
+                    // TODO: perform the given script
                     break;
 
                 default:

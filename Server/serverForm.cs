@@ -25,6 +25,8 @@ namespace D2RServer
         public static IDictionary<string, int> keyValueCodeMap;
 
         public static ArrayList scripts;
+        public static ArrayList tempScripts;
+
         public SettingsForm settingsForm;
 
         public string IPAddress;
@@ -71,10 +73,6 @@ namespace D2RServer
 
             settingsForm = new SettingsForm();
 
-
-
-
-
             Log(File.Exists(D2RConstants.ScriptFileName) ? "File exists." : "File does not exist.");
 
             if (File.Exists(D2RConstants.ScriptFileName))
@@ -82,12 +80,16 @@ namespace D2RServer
                 // Load file
                 string scriptFile = File.ReadAllText(D2RConstants.ScriptFileName);
 
-               // scripts = JsonConvert.DeserializeObject<D2RScript[]>(scriptFile);
+                scripts = JsonConvert.DeserializeObject<ArrayList>(scriptFile);
+
+                Log($"Loaded scripts ({scripts.Count})");
+
+                // scripts = JsonConvert.DeserializeObject<D2RScript[]>(scriptFile);
 
             }
 
             // Start server
-                netListener = new EventBasedNetListener();
+            netListener = new EventBasedNetListener();
             netServer = new NetManager(netListener);
             netWriter = new NetDataWriter();
             netServer.Start(port);
@@ -252,7 +254,32 @@ namespace D2RServer
 
         private void Settings_Button_Click(object sender, EventArgs e)
         {
-            settingsForm.ShowDialog(this);
+            //settingsForm.ShowDialog(this);
+
+            string tempScripts = JsonConvert.SerializeObject(scripts);
+
+            // Show testDialog as a modal dialog and determine if DialogResult = OK.
+            if (settingsForm.ShowDialog(this) == DialogResult.OK)
+            {
+                Log("Accepted");
+
+                tempScripts = JsonConvert.SerializeObject(scripts); // Serialize modified scripts
+
+                File.WriteAllText(D2RConstants.ScriptFileName, tempScripts);
+
+
+                //using (StreamWriter outputFile = new StreamWriter(D2RConstants.ScriptFileName))
+                //{
+                //    outputFile.WriteLine(tempScripts);
+                //}
+            }
+            else
+            {
+                scripts = JsonConvert.DeserializeObject<ArrayList>(tempScripts);
+
+                Log("Cancelled");
+            }
+
         }
 
 

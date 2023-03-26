@@ -55,7 +55,7 @@ namespace D2RServer
             this.NewScript_Button = new System.Windows.Forms.Button();
             this.ScriptName_TextBox = new System.Windows.Forms.TextBox();
             this.ScriptUp_Button = new System.Windows.Forms.Button();
-            this.SaveScripts_Button = new System.Windows.Forms.Button();
+            this.Accept_Button = new System.Windows.Forms.Button();
             this.Cancel_Button = new System.Windows.Forms.Button();
             this.Log_TextBox = new System.Windows.Forms.TextBox();
             this.groupBox3.SuspendLayout();
@@ -158,6 +158,7 @@ namespace D2RServer
             // 
             // DeleteAction_Button
             // 
+            this.DeleteAction_Button.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.DeleteAction_Button.Enabled = false;
             this.DeleteAction_Button.Location = new System.Drawing.Point(93, 211);
             this.DeleteAction_Button.Name = "DeleteAction_Button";
@@ -356,17 +357,19 @@ namespace D2RServer
             this.ScriptUp_Button.UseVisualStyleBackColor = true;
             this.ScriptUp_Button.Click += new System.EventHandler(this.ScriptUp_Button_Click);
             // 
-            // SaveScripts_Button
+            // Accept_Button
             // 
-            this.SaveScripts_Button.Location = new System.Drawing.Point(426, 369);
-            this.SaveScripts_Button.Name = "SaveScripts_Button";
-            this.SaveScripts_Button.Size = new System.Drawing.Size(125, 23);
-            this.SaveScripts_Button.TabIndex = 50;
-            this.SaveScripts_Button.Text = "Save";
-            this.SaveScripts_Button.UseVisualStyleBackColor = true;
+            this.Accept_Button.Location = new System.Drawing.Point(426, 369);
+            this.Accept_Button.Name = "Accept_Button";
+            this.Accept_Button.Size = new System.Drawing.Size(125, 23);
+            this.Accept_Button.TabIndex = 50;
+            this.Accept_Button.Text = "Save";
+            this.Accept_Button.UseVisualStyleBackColor = true;
+            this.Accept_Button.Click += new System.EventHandler(this.Accept_Button_Click);
             // 
             // Cancel_Button
             // 
+            this.Cancel_Button.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.Cancel_Button.Location = new System.Drawing.Point(557, 369);
             this.Cancel_Button.Name = "Cancel_Button";
             this.Cancel_Button.Size = new System.Drawing.Size(125, 23);
@@ -386,16 +389,22 @@ namespace D2RServer
             // 
             // SettingsForm
             // 
+            this.AcceptButton = this.Accept_Button;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.Cancel_Button;
             this.ClientSize = new System.Drawing.Size(694, 520);
+            this.ControlBox = false;
             this.Controls.Add(this.Log_TextBox);
             this.Controls.Add(this.Cancel_Button);
-            this.Controls.Add(this.SaveScripts_Button);
+            this.Controls.Add(this.Accept_Button);
             this.Controls.Add(this.groupBox3);
             this.KeyPreview = true;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "SettingsForm";
             this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "Settings";
             this.Load += new System.EventHandler(this.SettingsForm_Load);
             this.groupBox3.ResumeLayout(false);
@@ -433,7 +442,7 @@ namespace D2RServer
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.Button ScriptDown_Button;
         private System.Windows.Forms.Button DeleteScript_Button;
-        private System.Windows.Forms.Button SaveScripts_Button;
+        private System.Windows.Forms.Button Accept_Button;
         private System.Windows.Forms.Button Cancel_Button;
         private System.Windows.Forms.TextBox Log_TextBox;
         private System.Windows.Forms.TextBox ActionDelay_TextBox;

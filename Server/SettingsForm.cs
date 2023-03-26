@@ -17,11 +17,13 @@ namespace D2RServer
         private bool nonNumberEntered = false;
 
         public int uId = 1;
+
         public D2RScript selectedScript;
+        public D2RScript otherScript;
         public int selectedScriptIndex = -2;
-        public D2RScript other;
 
         public D2RScriptedAction selectedAction;
+        public D2RScriptedAction otherAction;
         public int selectedActionIndex = -2;
 
         public SettingsForm()
@@ -44,6 +46,14 @@ namespace D2RServer
             ActionY_TextBox.KeyDown += Handle_TextBox_KeyDown;
         }
 
+        // User accepted the modifications to the scripts
+        private void Accept_Button_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.OK;
+            this.Close();
+        }
+
+        // Update selected actions hotkey
         private void SettingsForm_KeyUp(object sender, KeyEventArgs e)
         {
             //Log($"{e.KeyCode}, {e.KeyValue}");
@@ -51,11 +61,13 @@ namespace D2RServer
             {
                 ActionKey_Button.Text = $"{e.KeyCode}";
                 selectedAction.aKey = e.KeyValue;
-                Actions_ListBox.Items[selectedAction.aId] = GetActionString();
+                Actions_ListBox.Items[selectedAction.aId] = ActionToString(selectedAction);
                 ActionKey_Button.Enabled = true;
                 waitingForKeyPress = false;
             }
         }
+
+        #region Actions
 
         // Make it so the action delay, x, and y textboxes ONLY accept numeric input
         private void Handle_TextBox_KeyDown(object sender, KeyEventArgs e)
@@ -95,47 +107,19 @@ namespace D2RServer
         private void ActionDelay_TextBox_TextChanged(object sender, EventArgs e)
         {
             selectedAction.aDelay = Int16.Parse(ActionDelay_TextBox.Text);
-            Actions_ListBox.Items[selectedAction.aId] = GetActionString();
+            Actions_ListBox.Items[selectedAction.aId] = ActionToString(selectedAction);
         }
 
         private void ActionX_TextBox_TextChanged(object sender, EventArgs e)
         {
             selectedAction.aX = Int16.Parse(ActionX_TextBox.Text);
-            Actions_ListBox.Items[selectedAction.aId] = GetActionString();
+            Actions_ListBox.Items[selectedAction.aId] = ActionToString(selectedAction);
         }
 
         private void ActionY_TextBox_TextChanged(object sender, EventArgs e)
         {
             selectedAction.aY = Int16.Parse(ActionY_TextBox.Text);
-            Actions_ListBox.Items[selectedAction.aId] = GetActionString();
-        }
-
-        private string GetActionString()
-        {
-            string actionString = "";
-
-            switch (selectedAction.aType)
-            {
-                case (D2RScriptedActionTypes.MouseMove):
-                    actionString = $"after {selectedAction.aDelay} ms, move the mouse to {selectedAction.aX}, {selectedAction.aY}";
-                    break;
-
-                case (D2RScriptedActionTypes.LeftClick):
-                    actionString = $"after {selectedAction.aDelay} ms, click the left mouse button";
-                    break;
-
-                case (D2RScriptedActionTypes.RightClick):
-                    actionString = $"after {selectedAction.aDelay}ms, click the right mouse button";
-                    break;
-
-                case (D2RScriptedActionTypes.KeyPress):
-                    actionString = $"after {selectedAction.aDelay}ms, press the '{serverForm.asciiMap[selectedAction.aKey]}' key";
-                    break;
-
-                default:
-                    break;
-            }
-            return actionString;
+            Actions_ListBox.Items[selectedAction.aId] = ActionToString(selectedAction);
         }
 
         private void NewAction_Button_Click(object sender, EventArgs e)
@@ -148,13 +132,176 @@ namespace D2RServer
 
             selectedAction.aId = Actions_ListBox.Items.Count;
             selectedScript.sActions.Add(selectedAction);
-            Actions_ListBox.Items.Add(GetActionString());
+            Actions_ListBox.Items.Add(ActionToString(selectedAction));
             Actions_ListBox.SelectedIndex = Actions_ListBox.Items.Count - 1;
-
 
             SetActioncontrols();
         }
 
+
+        // Delete the selected action
+        private void DeleteAction_Button_Click(object sender, EventArgs e)
+        {
+            if (selectedAction != null)
+            {
+                if (serverForm.scripts.Count != 1) // For all scripts after the one to be deleted...
+                {
+                    for (int i = selectedAction.aId + 1; i < serverForm.scripts.Count; i++)
+                    {
+                        GetScriptWithID(i).sId--; // Decrement script id
+                    }
+                }
+
+                Actions_ListBox.Items.RemoveAt(selectedAction.aId); // delete from listbox
+
+                selectedScript.sActions.Remove(selectedAction); // Delete from actions
+
+                selectedAction = null;
+                Actions_ListBox.SelectedIndex = -1;
+                selectedActionIndex = -2;
+
+                UpdateActionControls();
+            }
+        }
+
+        // Move the selected action up
+        private void ActionUp_Button_Click(object sender, EventArgs e)
+        {
+            if (selectedAction != null && selectedAction.aId > 0)
+            {
+                var other = GetActionWithID(selectedAction.aId - 1);
+                
+                //Log($"other:{other.aId}, {GetActionString(other)}");
+                //Log($"selected:{selectedAction.aId}, {GetActionString(selectedAction)}");
+
+                Actions_ListBox.Items[--selectedAction.aId] = ActionToString(selectedAction);
+                Actions_ListBox.Items[++other.aId] = ActionToString(other);
+
+                Actions_ListBox.SelectedIndex = selectedAction.aId;
+            }
+        }
+
+        // Move the selected action down
+        private void ActionDown_Button_Click(object sender, EventArgs e)
+        {
+            selectedActionIndex = -2;
+            Actions_ListBox.SelectedIndex = -1;
+
+            if (selectedAction != null && selectedAction.aId < Actions_ListBox.Items.Count - 1)
+            {
+                var other = GetActionWithID(selectedAction.aId + 1);
+                Actions_ListBox.Items[++selectedAction.aId] = ActionToString(selectedAction);
+                Actions_ListBox.Items[--other.aId] = ActionToString(other);
+
+                Actions_ListBox.SelectedIndex = selectedAction.aId;
+            }
+        }
+
+
+
+        // User changed the selected actions type to "MouseMove"
+        private void MouseMove_CheckedChanged(object sender, EventArgs e)
+        {
+            if (MouseMove_RadioButton.Checked)
+            {
+                ActionKey_Button.Enabled = false;
+                ActionX_TextBox.Enabled = true;
+                ActionY_TextBox.Enabled = true;
+                ActionX_TextBox.Text = $"{selectedAction.aX}";
+                ActionY_TextBox.Text = $"{selectedAction.aY}";
+
+                selectedAction.aType = D2RScriptedActionTypes.MouseMove;
+                Actions_ListBox.Items[selectedAction.aId] = ActionToString(selectedAction);
+            }
+        }
+
+        // User changed the selected actions type to "LeftClick"
+        private void LeftClick_RadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (LeftClick_RadioButton.Checked)
+            {
+                ActionKey_Button.Enabled = false;
+                ActionX_TextBox.Enabled = false;
+                ActionY_TextBox.Enabled = false;
+
+                selectedAction.aType = D2RScriptedActionTypes.LeftClick;
+                Actions_ListBox.Items[selectedAction.aId] = ActionToString(selectedAction);
+            }
+        }
+
+        // User changed the selected actions type to "RightClick"
+        private void RightClick_RadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (RightClick_RadioButton.Checked)
+            {
+                ActionKey_Button.Enabled = false;
+                ActionX_TextBox.Enabled = false;
+                ActionY_TextBox.Enabled = false;
+ 
+                selectedAction.aType = D2RScriptedActionTypes.RightClick;
+                Actions_ListBox.Items[selectedAction.aId] = ActionToString(selectedAction);
+            }
+        }
+
+        // User changed the selected actions type to "KeyPress"
+        private void KeyPress_RadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (KeyPress_RadioButton.Checked)
+            {
+                ActionKey_Button.Enabled = true;
+                ActionX_TextBox.Enabled = false;
+                ActionY_TextBox.Enabled = false;
+
+                ActionKey_Button.Text = serverForm.asciiMap[selectedAction.aKey];
+                selectedAction.aType = D2RScriptedActionTypes.KeyPress;
+                Actions_ListBox.Items[selectedAction.aId] = ActionToString(selectedAction);
+            }
+        }
+
+        // Build the string representation for the given action
+        private string ActionToString(D2RScriptedAction action)
+        {
+            string actionString = "";
+
+            switch (action.aType)
+            {
+                case (D2RScriptedActionTypes.MouseMove):
+                    actionString = $"after {action.aDelay} ms, move the mouse to {action.aX}, {action.aY}";
+                    break;
+
+                case (D2RScriptedActionTypes.LeftClick):
+                    actionString = $"after {action.aDelay} ms, click the left mouse button";
+                    break;
+
+                case (D2RScriptedActionTypes.RightClick):
+                    actionString = $"after {action.aDelay}ms, click the right mouse button";
+                    break;
+
+                case (D2RScriptedActionTypes.KeyPress):
+                    actionString = $"after {action.aDelay}ms, press the '{serverForm.asciiMap[action.aKey]}' key";
+                    break;
+
+                default:
+                    break;
+            }
+            return actionString;
+        }
+
+        private void Actions_ListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Actions_ListBox.SelectedIndex != -1 && Actions_ListBox.SelectedIndex != selectedActionIndex)
+            {
+                selectedAction = GetActionWithID(Actions_ListBox.SelectedIndex);
+
+                selectedActionIndex = Actions_ListBox.SelectedIndex;
+            }
+            UpdateActionControls();
+
+            SetActioncontrols();
+        }
+
+
+        // Enable or disable action controls
         private void SetActioncontrols()
         {
             Actions_GroupBox.Enabled = true;
@@ -203,89 +350,25 @@ namespace D2RServer
             }
         }
 
-
-
-
-        private void DeleteAction_Button_Click(object sender, EventArgs e)
+        private void UpdateActionControls()
         {
+            ActionUp_Button.Enabled = false;
+            ActionDown_Button.Enabled = false;
+            DeleteAction_Button.Enabled = false;
 
-        }
-
-
-        private void ActionUp_Button_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void ActionDown_Button_Click(object sender, EventArgs e)
-        {
-
-        }
-        private void Actions_ListBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Log($"selectedindexchanged");
-            SetActioncontrols();
-
-        }
-
-
-
-        // User changed action type to "MouseMove"
-        private void MouseMove_CheckedChanged(object sender, EventArgs e)
-        {
-            if (MouseMove_RadioButton.Checked)
+            if (selectedAction != null)
             {
-                ActionKey_Button.Enabled = false;
-                ActionX_TextBox.Enabled = true;
-                ActionY_TextBox.Enabled = true;
-                ActionX_TextBox.Text = $"{selectedAction.aX}";
-                ActionY_TextBox.Text = $"{selectedAction.aY}";
+                DeleteAction_Button.Enabled = true;
 
-                selectedAction.aType = D2RScriptedActionTypes.MouseMove;
-                Actions_ListBox.Items[selectedAction.aId] = GetActionString();
-            }
-        }
+                if (selectedAction.aId != Actions_ListBox.Items.Count - 1)
+                {
+                    ActionDown_Button.Enabled = true;
+                }
 
-        // User changed action type to "LeftClick"
-        private void LeftClick_RadioButton_CheckedChanged(object sender, EventArgs e)
-        {
-            if (LeftClick_RadioButton.Checked)
-            {
-                ActionKey_Button.Enabled = false;
-                ActionX_TextBox.Enabled = false;
-                ActionY_TextBox.Enabled = false;
-
-                selectedAction.aType = D2RScriptedActionTypes.LeftClick;
-                Actions_ListBox.Items[selectedAction.aId] = GetActionString();
-            }
-        }
-
-        // User changed action type to "RightClick"
-        private void RightClick_RadioButton_CheckedChanged(object sender, EventArgs e)
-        {
-            if (RightClick_RadioButton.Checked)
-            {
-                ActionKey_Button.Enabled = false;
-                ActionX_TextBox.Enabled = false;
-                ActionY_TextBox.Enabled = false;
- 
-                selectedAction.aType = D2RScriptedActionTypes.RightClick;
-                Actions_ListBox.Items[selectedAction.aId] = GetActionString();
-            }
-        }
-
-        // User changed action type to "KeyPress"
-        private void KeyPress_RadioButton_CheckedChanged(object sender, EventArgs e)
-        {
-            if (KeyPress_RadioButton.Checked)
-            {
-                ActionKey_Button.Enabled = true;
-                ActionX_TextBox.Enabled = false;
-                ActionY_TextBox.Enabled = false;
-
-                ActionKey_Button.Text = serverForm.asciiMap[selectedAction.aKey];
-                selectedAction.aType = D2RScriptedActionTypes.KeyPress;
-                Actions_ListBox.Items[selectedAction.aId] = GetActionString();
+                if (selectedAction.aId > 0)
+                {
+                    ActionUp_Button.Enabled = true;
+                }
             }
         }
 
@@ -300,48 +383,10 @@ namespace D2RServer
             return null;
         }
 
-        // Get the KeyCodeValue for the given string, or 0 if it does not exist
-        private int GetKeyValueCode(string key)
-        {
-            if (serverForm.keyValueCodeMap.ContainsKey(key))
-            {
-                return serverForm.keyValueCodeMap[key];
-            }
-            return 0;
-        }
+
+        #endregion
 
         #region Script Control Code
-
-        // Conditionally enable and disable controls
-        private void UpdateScriptControls()
-        {
-            ScriptUp_Button.Enabled = false;
-            ScriptDown_Button.Enabled = false;
-            DeleteScript_Button.Enabled = false;
-
-            if (selectedScript == null)
-            {
-                ScriptName_TextBox.Enabled = false;
-                Actions_GroupBox.Enabled = false;
-            }
-            else
-            {
-                Actions_GroupBox.Enabled = true;
-                ScriptName_TextBox.Enabled = true;
-
-                DeleteScript_Button.Enabled = true;
-
-                if (selectedScript.sId != Scripts_ListBox.Items.Count - 1)
-                {
-                    ScriptDown_Button.Enabled = true;
-                }
-
-                if (selectedScript.sId > 0)
-                {
-                    ScriptUp_Button.Enabled = true;
-                }
-            }
-        }
 
         // Create a new script
         private void NewScript_Button_Click(object sender, EventArgs e)
@@ -357,7 +402,7 @@ namespace D2RServer
             serverForm.scripts.Add(script);
             Scripts_ListBox.Items.Add(script.sName);
 
-            Scripts_ListBox.SelectedIndex = Scripts_ListBox.Items.Count - 1; // UpdateScriptControls() will be called when SelectedIndexChanged() is triggered
+            Scripts_ListBox.SelectedIndex = Scripts_ListBox.Items.Count - 1;
         }
 
         // Delete the selected script
@@ -415,12 +460,22 @@ namespace D2RServer
             }
         }
 
+        // User modified selected script name
+        private void ScriptName_TextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (selectedScript != null)
+            {
+                selectedScript.sName = ScriptName_TextBox.Text;
+                Scripts_ListBox.Items[selectedScript.sId] = ScriptName_TextBox.Text;
+            }
+        }
+
         // User clicked on a script
         private void Scripts_ListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (Scripts_ListBox.SelectedIndex != -1 && Scripts_ListBox.SelectedIndex != selectedScriptIndex)
             {
-                selectedScript = GetScriptWithID(Scripts_ListBox.SelectedIndex); // (D2RScript)serverForm.scripts[Scripts_ListBox.SelectedIndex];
+                selectedScript = GetScriptWithID(Scripts_ListBox.SelectedIndex);
                 ScriptName_TextBox.Text = Scripts_ListBox.SelectedItem.ToString();
 
                 selectedScriptIndex = Scripts_ListBox.SelectedIndex;
@@ -429,13 +484,55 @@ namespace D2RServer
             UpdateScriptControls();
         }
 
-        // User modified selected script name
-        private void ScriptName_TextBox_TextChanged(object sender, EventArgs e)
+        // Conditionally enable and disable controls
+        private void UpdateScriptControls()
         {
-            if (selectedScript != null)
+            ScriptUp_Button.Enabled = false;
+            ScriptDown_Button.Enabled = false;
+            DeleteScript_Button.Enabled = false;
+
+            if (selectedScript == null)
             {
-                selectedScript.sName = ScriptName_TextBox.Text;
-                Scripts_ListBox.Items[selectedScript.sId] = ScriptName_TextBox.Text;
+                ScriptName_TextBox.Enabled = false;
+                Actions_GroupBox.Enabled = false;
+            }
+            else
+            {
+                ScriptName_TextBox.Enabled = true;
+
+                DeleteScript_Button.Enabled = true;
+
+                if (selectedScript.sId != Scripts_ListBox.Items.Count - 1)
+                {
+                    ScriptDown_Button.Enabled = true;
+                }
+
+                if (selectedScript.sId > 0)
+                {
+                    ScriptUp_Button.Enabled = true;
+                }
+
+                // Init actions thingy
+                Actions_GroupBox.Enabled = true;
+                selectedActionIndex = -2;
+                Actions_ListBox.SelectedIndex = -1;
+                Actions_ListBox.Items.Clear();
+
+                selectedAction = null;
+
+                ActionKey_Button.Enabled = false;
+                ActionX_TextBox.Enabled = false;
+                ActionY_TextBox.Enabled = false;
+
+                UpdateActionControls();
+
+                if (selectedScript.sActions.Count > 0)
+                {
+                    for (int i = 0; i < selectedScript.sActions.Count; i++)
+                    {
+                        Actions_ListBox.Items.Add(ActionToString((D2RScriptedAction)selectedScript.sActions[i]));
+                    }
+                }
             }
         }
 
@@ -449,8 +546,10 @@ namespace D2RServer
             }
             return null;
         }
-        
+
         #endregion
+
+        #region Utility
 
         // Append the given text to the log textbox
         private void Log(string text)
@@ -460,6 +559,7 @@ namespace D2RServer
             Log_TextBox.ScrollToCaret();
         }
 
+        #endregion
 
     }
 }
