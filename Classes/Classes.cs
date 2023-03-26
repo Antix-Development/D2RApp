@@ -1,5 +1,7 @@
 ﻿
-using System.Collections;
+//using System.Collections;
+using System.Collections.Generic;
+
 
 namespace Classes
 {
@@ -13,12 +15,12 @@ namespace Classes
     {
         public int sId { get; set; }
         public string sName { get; set; }
-        public ArrayList sActions { get; set; }
+        public List<D2RScriptedAction> sActions { get; set; }
 
         public D2RScript(string name)
         {
             sName = name;
-            sActions = new ArrayList();
+            sActions = new List<D2RScriptedAction>();
         }
     }
 

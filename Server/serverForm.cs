@@ -99,22 +99,22 @@ namespace D2RServer
                 for (int i = 0; i < scripts.Count; i++)
                 {
                     var s = (D2RScript)scripts[i];
-                    Log($"{s.sId}, {s.sName}");
+                    Log($"{s.sId}, {s.sName}, {s.sActions}");
                 }
 
 
                 // scripts = JsonConvert.DeserializeObject<D2RScript[]>(scriptFile);
 
-                ArrayList actualScripts = new ArrayList();
+                //ArrayList actualScripts = new ArrayList();
 
-                for (int i = 0; i < scripts.Count; i++)
-                {
-                    var encodedScript = scripts[i];
-                    Log($"{encodedScript.GetType()}");
+                //for (int i = 0; i < scripts.Count; i++)
+                //{
+                //    var encodedScript = scripts[i];
+                //    Log($"{encodedScript.GetType()}");
 
-                    //D2RScript decodedScript = JsonConvert.DeserializeObject(encodedScript);
+                //    //D2RScript decodedScript = JsonConvert.DeserializeObject(encodedScript);
 
-                }
+                //}
             }
 
             settingsForm = new SettingsForm();
