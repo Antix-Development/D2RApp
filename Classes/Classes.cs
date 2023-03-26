@@ -11,9 +11,9 @@ namespace Classes
 
     public class D2RScript
     {
-        public int sId;
-        public string sName;
-        public ArrayList sActions;
+        public int sId { get; set; }
+        public string sName { get; set; }
+        public ArrayList sActions { get; set; }
 
         public D2RScript(string name)
         {
@@ -32,12 +32,12 @@ namespace Classes
 
     public class D2RScriptedAction
     {
-        public int aType;
-        public int aId;
-        public int aDelay;
-        public int aKey;
-        public int aX;
-        public int aY;
+        public int aType { get; set; }
+        public int aId { get; set; }
+        public int aDelay { get; set; }
+        public int aKey { get; set; }
+        public int aX { get; set; }
+        public int aY { get; set; }
 
         public D2RScriptedAction()
         {

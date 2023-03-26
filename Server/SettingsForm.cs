@@ -33,6 +33,19 @@ namespace D2RServer
 
         private void SettingsForm_Load(object sender, EventArgs e)
         {
+
+            //Log(serverForm.scripts.ToString());
+
+            for (int i = 0; i < serverForm.scripts.Count; i++)
+            {
+
+                var script = serverForm.scripts[i];
+                //Log($"{script.GetType()}, {script.ToString()}");
+
+
+                Scripts_ListBox.Items.Add(script.sName);
+
+            }
             // Install keyboard handlers
             this.KeyUp += SettingsForm_KeyUp;
 
