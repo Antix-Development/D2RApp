@@ -73,23 +73,8 @@ namespace D2RServer
                 string scriptFile = File.ReadAllText(D2RConstants.ScriptFileName); // Load json file
                 scripts = JsonConvert.DeserializeObject<List<D2RScript>>(scriptFile); // Recreate scripts list
 
-                Log($"Loaded scripts ({scripts.Count})");
-
-                scripts.Sort((a, b) => a.sId.CompareTo(b.sId)); // sort to ascending order
-
-                for (int i = 0; i < scripts.Count; i++)
-                {
-                    var s = (D2RScript)scripts[i]; // Next script
-                    Log($"sId:{s.sId}, {s.sName}");
-
-                    s.sActions.Sort((a, b) => a.aId.CompareTo(b.aId)); // sort into ascending order
-
-                    for (int j = 0; j < s.sActions.Count; j++)
-                    {
-                        var a = (D2RScriptedAction)s.sActions[j]; // Next action
-                        Log($"aId:{a.aId}");
-                    }
-                }
+                ReindexScriptsAndActions();
+                //Log($"Loaded scripts ({scripts.Count})");
             }
 
             settingsForm = new ScriptEditor(); // Create new instance of script editor window
@@ -130,6 +115,26 @@ namespace D2RServer
             netListener.PeerConnectedEvent -= NetListener_PeerConnectedEvent;
             netListener.PeerDisconnectedEvent -= NetListener_PeerDisconnectedEvent;
             netServer.Stop();
+        }
+
+        // Sort scripts and their associated actions in ascending order
+        private void ReindexScriptsAndActions()
+        {
+            scripts.Sort((a, b) => a.sId.CompareTo(b.sId)); // sort to ascending order
+
+            for (int i = 0; i < scripts.Count; i++)
+            {
+                var s = (D2RScript)scripts[i]; // Next script
+                Log($"sId:{s.sId}, {s.sName}");
+
+                s.sActions.Sort((a, b) => a.aId.CompareTo(b.aId)); // sort into ascending order
+
+                for (int j = 0; j < s.sActions.Count; j++)
+                {
+                    var a = (D2RScriptedAction)s.sActions[j]; // Next action
+                    Log($"aId:{a.aId}");
+                }
+            }
         }
 
         // Perform server polling stuff
@@ -273,6 +278,8 @@ namespace D2RServer
             else
             {
                 scripts = JsonConvert.DeserializeObject<List<D2RScript>>(tempScripts);
+
+                ReindexScriptsAndActions();
 
                 Log("Cancelled");
             }
