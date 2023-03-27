@@ -7,38 +7,45 @@ namespace D2RServer
 {
     public partial class ScriptEditor : Form
     {
-        public bool waitingForKeyPress = false;
-        private bool nonNumberEntered = false;
-        private bool scriptListPopulated = false;
+        public bool waitingForKeyPress = false; // true if D2RApp is waiting for the user to press a key that will be associated with the currently selected action
+        private bool nonNumberEntered = false; // Used for filtering out non umeric keypresses
 
-        public int uId = 1;
-
-        public D2RScript selectedScript;
+        public D2RScript selectedScript; // Currently selected script
         public int selectedScriptIndex = -2;
 
-        public D2RScriptedAction selectedAction;
+        public D2RScriptedAction selectedAction; // Currently selected Action
         public int selectedActionIndex = -2;
 
         // Windows Form initialisation
         public ScriptEditor()
         {
             InitializeComponent();
+
+            FormClosing += ScriptEditor_FormClosing; // Install "cleanup" code
+        }
+
+        private void ScriptEditor_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Actions_ListBox.SelectedIndex = -1;
+            Actions_ListBox.Items.Clear();
+            selectedActionIndex = -2;
+            selectedAction = null;
+
+            Scripts_ListBox.SelectedIndex = -1;
+            Scripts_ListBox.Items.Clear();
+            selectedScriptIndex = -2;
+            selectedScript = null;
         }
 
         // Application start-up
         private void SettingsForm_Load(object sender, EventArgs e)
         {
 
-            // Populate scripts list (once only)
-            if (!scriptListPopulated)
+            // Popululate list of scripts
+            for (int i = 0; i < serverForm.scripts.Count; i++)
             {
-                for (int i = 0; i < serverForm.scripts.Count; i++)
-                {
-                    var script = serverForm.scripts[i];
-                    Scripts_ListBox.Items.Add(script.sName);
-                }
-
-                scriptListPopulated = true;
+                var script = serverForm.scripts[i];
+                Scripts_ListBox.Items.Add(script.sName);
             }
 
             // Install keyboard handlers
@@ -58,6 +65,13 @@ namespace D2RServer
         private void Accept_Button_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.OK;
+            this.Close();
+        }
+
+        // User cancelled modifications
+        private void Cancel_Button_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
 
@@ -150,11 +164,13 @@ namespace D2RServer
         {
             if (selectedAction != null)
             {
-                if (serverForm.scripts.Count != 1) // For all scripts after the one to be deleted...
+                Console.WriteLine($"selected action != null");
+                if (selectedScript.sActions.Count != 1) // For all actions after the one to be deleted...
                 {
-                    for (int i = selectedAction.aId + 1; i < serverForm.scripts.Count; i++)
+
+                    for (int i = selectedAction.aId + 1; i < selectedScript.sActions.Count; i++)
                     {
-                        GetScriptWithID(i).sId--; // Decrement script id
+                        GetActionWithID(i).aId--; // Decrement action id
                     }
                 }
 
@@ -162,9 +178,9 @@ namespace D2RServer
 
                 selectedScript.sActions.Remove(selectedAction); // Delete from actions
 
-                selectedAction = null;
                 Actions_ListBox.SelectedIndex = -1;
                 selectedActionIndex = -2;
+                selectedAction = null;
 
                 UpdateActionControls();
             }
@@ -352,6 +368,7 @@ namespace D2RServer
             }
         }
 
+        // Enable or disable action buttons
         private void UpdateActionControls()
         {
             ActionUp_Button.Enabled = false;
@@ -398,8 +415,18 @@ namespace D2RServer
             ScriptName_TextBox.Enabled = false;
             ScriptName_TextBox.Text = String.Empty;
 
-            D2RScript script = new D2RScript($"new{uId++}");
+            // Generate a unique script name
+            string uId;
+            int i = 1;
+            do
+            {
+                uId = $"script_{i++}";
+            } while (Scripts_ListBox.Items.Contains(uId)); // don't stop generating i=names until it's unique
+
+            // Create new script, add it to the list, and select it
+            D2RScript script = new D2RScript(uId);
             script.sId = Scripts_ListBox.Items.Count;
+
             serverForm.scripts.Add(script);
             Scripts_ListBox.Items.Add(script.sName);
 

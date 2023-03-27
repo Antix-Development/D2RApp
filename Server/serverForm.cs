@@ -18,10 +18,8 @@ namespace D2RServer
     {
         //                                 000 001 002 003 004 005 006 007 008 009 010 011 012 013 014 015 016 017 018 019 020 021 022 023 024 025 026 027 028 029 030 031 032      033 034 035 036 037 038 039 040 041 042 043 044 045 046 047 048  049  050  051  052  053  054  055  056  057  058 059 060 061 062 063 064 065  066  067  068  069  070  071  072  073  074  075  076  077  078  079  080  081  082  083  084  085  086  087  088  089  090  091 092 093 094 095 096 097 098 099 100 101 102 103 104 105 106 107 108 109 110 111 112   113   114   115   116   117   118   119   120   121    122    123    124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 181 182 183 184 185 186  187  188  189  190  191  192  193 194 195 196 197 198 199 200 201 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217 218 219  220   221  222  223 224 225 226 227 228 229 230 231 232 233 234 235 236 237 238 239 240 241 242 243 244 245 246 247 248 249 250 251 252 253 254 255
         public static string[] asciiMap = {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "SPACE", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "", "", "", "", "", "", "", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ";", "=", ",", "-", ".", "/", "`", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "[", "\\", "]", "'", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""};
-        public static IDictionary<string, int> keyValueCodeMap;
-
+        
         public static List<D2RScript> scripts;
-
         public static List<D2RScript> tempScripts;
 
         public ScriptEditor settingsForm;
@@ -34,6 +32,7 @@ namespace D2RServer
         public NetDataWriter netWriter;
 
         public IKeyboardMouseEvents m_GlobalHook;
+
         public bool altHeld = false; // true if the ALT key is currenty being held down
 
         // Windows Form initialisation
@@ -49,32 +48,24 @@ namespace D2RServer
             }
 
             this.Text = $"{IPAddress}:{port}"; // Set forms title to ip address and port
-
-            // Generate key map
-            keyValueCodeMap = new Dictionary<string, int>();
-            for (int i = 0; i < asciiMap.Length; i++)
-            {
-                var key = asciiMap[i];
-
-                if (key != "")
-                {
-                    keyValueCodeMap[key] = i;
-                }
-            }
         }
 
         // Application start-up
         private void Form1_Load(object sender, EventArgs e)
         {
+            for (int i = 0; i < 128; i++)
+            {
+                char ch = (char)i;
+
+
+                Console.WriteLine("{0} converts to '{1}'", i, ch);
+            }
             scripts = new List<D2RScript>(); // Create empty list of scripts
 
             if (File.Exists(D2RConstants.ScriptFileName))
             {
                 string scriptFile = File.ReadAllText(D2RConstants.ScriptFileName); // Load json file
                 scripts = JsonConvert.DeserializeObject<List<D2RScript>>(scriptFile); // Recreate scripts list
-
-                ReindexScriptsAndActions();
-                //Log($"Loaded scripts ({scripts.Count})");
             }
 
             settingsForm = new ScriptEditor(); // Create new instance of script editor window
@@ -115,26 +106,6 @@ namespace D2RServer
             netListener.PeerConnectedEvent -= NetListener_PeerConnectedEvent;
             netListener.PeerDisconnectedEvent -= NetListener_PeerDisconnectedEvent;
             netServer.Stop();
-        }
-
-        // Sort scripts and their associated actions in ascending order
-        private void ReindexScriptsAndActions()
-        {
-            scripts.Sort((a, b) => a.sId.CompareTo(b.sId)); // sort to ascending order
-
-            for (int i = 0; i < scripts.Count; i++)
-            {
-                var s = (D2RScript)scripts[i]; // Next script
-                Log($"sId:{s.sId}, {s.sName}");
-
-                s.sActions.Sort((a, b) => a.aId.CompareTo(b.aId)); // sort into ascending order
-
-                for (int j = 0; j < s.sActions.Count; j++)
-                {
-                    var a = (D2RScriptedAction)s.sActions[j]; // Next action
-                    Log($"aId:{a.aId}");
-                }
-            }
         }
 
         // Perform server polling stuff
@@ -249,6 +220,49 @@ namespace D2RServer
             Log($"{peer.EndPoint} disconnected at {TimeStamp()}");
         }
 
+        // User clicked the "Edit Scripts" button
+        private void Settings_Button_Click(object sender, EventArgs e)
+        {
+            ReindexScriptsAndActions();
+
+            string tempScripts = JsonConvert.SerializeObject(scripts); // Cache scripts for use if user cancels edits
+
+            // Show scrit editor window
+            if (settingsForm.ShowDialog(this) == DialogResult.OK)
+            {
+                // 
+                // Save scripts
+                // 
+
+                ReindexScriptsAndActions();
+
+                File.WriteAllText(D2RConstants.ScriptFileName, JsonConvert.SerializeObject(scripts)); // Serialize and write to storage
+            }
+            else
+            {
+                // 
+                // Discard changes
+                // 
+
+                scripts = JsonConvert.DeserializeObject<List<D2RScript>>(tempScripts); // Recreate from cached scripts
+
+                ReindexScriptsAndActions();
+            }
+        }
+
+        // Sort scripts and their associated actions in ascending order
+        private void ReindexScriptsAndActions()
+        {
+            scripts.Sort((a, b) => a.sId.CompareTo(b.sId)); // Sort scripts in ascending order
+
+            for (int i = 0; i < scripts.Count; i++)
+            {
+                var s = (D2RScript)scripts[i]; // Next script
+
+                s.sActions.Sort((a, b) => a.aId.CompareTo(b.aId)); // Sort actions belonging to the current script in ascending order
+            }
+        }
+
         // Get current date and time as a string
         private string TimeStamp()
         {
@@ -262,30 +276,6 @@ namespace D2RServer
             Log_TextBox.AppendText(Environment.NewLine);
             Log_TextBox.ScrollToCaret();
         }
-
-        private void Settings_Button_Click(object sender, EventArgs e)
-        {
-            string tempScripts = JsonConvert.SerializeObject(scripts);
-
-            // Show testDialog as a modal dialog and determine if DialogResult = OK.
-            if (settingsForm.ShowDialog(this) == DialogResult.OK)
-            {
-                string jsonString = JsonConvert.SerializeObject(scripts);
-                File.WriteAllText(D2RConstants.ScriptFileName, jsonString);
-
-                Log("Accepted");
-            }
-            else
-            {
-                scripts = JsonConvert.DeserializeObject<List<D2RScript>>(tempScripts);
-
-                ReindexScriptsAndActions();
-
-                Log("Cancelled");
-            }
-
-        }
-
 
     }
 }

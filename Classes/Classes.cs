@@ -9,12 +9,15 @@ namespace Classes
     public class D2RConstants
     {
         public static string ScriptFileName = "scripts.json";
+        public static int DefaultActionDelay = 250;
     }
 
     public class D2RScript
     {
         public int sId { get; set; }
+
         public string sName { get; set; }
+
         public List<D2RScriptedAction> sActions { get; set; }
 
         public D2RScript(string name)
@@ -44,7 +47,7 @@ namespace Classes
         public D2RScriptedAction()
         {
             aType = D2RScriptedActionTypes.MouseMove;
-            aDelay = 250;
+            aDelay = D2RConstants.DefaultActionDelay;
             aX = 0;
             aY = 0;
             aKey = 0;

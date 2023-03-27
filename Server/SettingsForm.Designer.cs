@@ -157,7 +157,6 @@ namespace D2RServer
             // 
             // DeleteAction_Button
             // 
-            this.DeleteAction_Button.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.DeleteAction_Button.Enabled = false;
             this.DeleteAction_Button.Location = new System.Drawing.Point(93, 211);
             this.DeleteAction_Button.Name = "DeleteAction_Button";
@@ -259,6 +258,7 @@ namespace D2RServer
             // 
             // NewAction_Button
             // 
+            this.NewAction_Button.Enabled = false;
             this.NewAction_Button.Location = new System.Drawing.Point(6, 211);
             this.NewAction_Button.Name = "NewAction_Button";
             this.NewAction_Button.Size = new System.Drawing.Size(81, 23);
@@ -368,13 +368,13 @@ namespace D2RServer
             // 
             // Cancel_Button
             // 
-            this.Cancel_Button.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.Cancel_Button.Location = new System.Drawing.Point(557, 369);
             this.Cancel_Button.Name = "Cancel_Button";
             this.Cancel_Button.Size = new System.Drawing.Size(125, 23);
             this.Cancel_Button.TabIndex = 117;
             this.Cancel_Button.Text = "Cancel";
             this.Cancel_Button.UseVisualStyleBackColor = true;
+            this.Cancel_Button.Click += new System.EventHandler(this.Cancel_Button_Click);
             // 
             // ScriptEditor
             // 
