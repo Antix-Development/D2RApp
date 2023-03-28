@@ -35,7 +35,8 @@ namespace D2RApp
             this.Log_TextBox = new System.Windows.Forms.TextBox();
             this.MousePosition_Label = new System.Windows.Forms.Label();
             this.ServerPort_TextBox = new System.Windows.Forms.TextBox();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.Net_Timer = new System.Windows.Forms.Timer(this.components);
+            this.Script_Timer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // Connection_Button
@@ -82,10 +83,14 @@ namespace D2RApp
             this.ServerPort_TextBox.TabIndex = 9;
             this.ServerPort_TextBox.Text = "9000";
             // 
-            // timer1
+            // Net_Timer
             // 
-            this.timer1.Interval = 16;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.Net_Timer.Interval = 16;
+            this.Net_Timer.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // Script_Timer
+            // 
+            this.Script_Timer.Tick += new System.EventHandler(this.Script_Timer_Tick);
             // 
             // client_Form
             // 
@@ -99,6 +104,7 @@ namespace D2RApp
             this.Controls.Add(this.Connection_Button);
             this.MaximizeBox = false;
             this.Name = "client_Form";
+            this.ShowIcon = false;
             this.Text = "Client";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -114,7 +120,8 @@ namespace D2RApp
         private System.Windows.Forms.TextBox Log_TextBox;
         private System.Windows.Forms.Label MousePosition_Label;
         private System.Windows.Forms.TextBox ServerPort_TextBox;
-        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer Net_Timer;
+        private System.Windows.Forms.Timer Script_Timer;
     }
 }
 

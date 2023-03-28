@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+D2RApp - A MultiBoxing application for Diablo II Ressurrected.
+Copyright (c) Cliff Earl, Antix Development, 2023.
+MIT License.
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
@@ -35,6 +41,8 @@ namespace D2RServer
 
         public bool altHeld = false; // true if the ALT key is currenty being held down
 
+        public TableLayoutPanel tableLayoutPanel = null;
+
         // Windows Form initialisation
         public serverForm()
         {
@@ -53,13 +61,6 @@ namespace D2RServer
         // Application start-up
         private void Form1_Load(object sender, EventArgs e)
         {
-            for (int i = 0; i < 128; i++)
-            {
-                char ch = (char)i;
-
-
-                Console.WriteLine("{0} converts to '{1}'", i, ch);
-            }
             scripts = new List<D2RScript>(); // Create empty list of scripts
 
             if (File.Exists(D2RConstants.ScriptFileName))
@@ -67,6 +68,8 @@ namespace D2RServer
                 string scriptFile = File.ReadAllText(D2RConstants.ScriptFileName); // Load json file
                 scripts = JsonConvert.DeserializeObject<List<D2RScript>>(scriptFile); // Recreate scripts list
             }
+
+            CreateScriptButtons();
 
             settingsForm = new ScriptEditor(); // Create new instance of script editor window
 
@@ -78,7 +81,7 @@ namespace D2RServer
             netListener.ConnectionRequestEvent += NetListener_ConnectionRequestEvent;
             netListener.PeerConnectedEvent += NetListener_PeerConnectedEvent;
             netListener.PeerDisconnectedEvent += NetListener_PeerDisconnectedEvent;
-            timer1.Enabled = true;
+            Net_Timer.Enabled = true;
 
             // Start intercepting input events
             m_GlobalHook = Hook.GlobalEvents();
@@ -101,7 +104,7 @@ namespace D2RServer
             m_GlobalHook.Dispose();
 
             // Stop server
-            timer1.Enabled = false;
+            Net_Timer.Enabled = false;
             netListener.ConnectionRequestEvent -= NetListener_ConnectionRequestEvent;
             netListener.PeerConnectedEvent -= NetListener_PeerConnectedEvent;
             netListener.PeerDisconnectedEvent -= NetListener_PeerDisconnectedEvent;
@@ -210,6 +213,10 @@ namespace D2RServer
         {
             Clients_ListBox.Items.Add(peer.EndPoint);
             Log($"{peer.EndPoint} connected at {TimeStamp()}");
+
+            netWriter.Put(JsonConvert.SerializeObject(scripts));
+            peer.Send(netWriter, DeliveryMethod.ReliableOrdered);
+            netWriter.Reset(port);
         }
 
         // A client disconnected from the server
@@ -235,8 +242,13 @@ namespace D2RServer
                 // 
 
                 ReindexScriptsAndActions();
+                CreateScriptButtons();
 
                 File.WriteAllText(D2RConstants.ScriptFileName, JsonConvert.SerializeObject(scripts)); // Serialize and write to storage
+
+                netWriter.Put(JsonConvert.SerializeObject(scripts));
+                netServer.SendToAll(netWriter, DeliveryMethod.ReliableOrdered);
+                netWriter.Reset(port);
             }
             else
             {
@@ -247,6 +259,7 @@ namespace D2RServer
                 scripts = JsonConvert.DeserializeObject<List<D2RScript>>(tempScripts); // Recreate from cached scripts
 
                 ReindexScriptsAndActions();
+                CreateScriptButtons();
             }
         }
 
@@ -260,6 +273,46 @@ namespace D2RServer
                 var s = (D2RScript)scripts[i]; // Next script
 
                 s.sActions.Sort((a, b) => a.aId.CompareTo(b.aId)); // Sort actions belonging to the current script in ascending order
+            }
+        }
+
+        // Populate Script_Button_Panel with dynamically generated buttons
+        private void CreateScriptButtons()
+        {
+            if (Script_Button_Panel != null) Script_Button_Panel.Controls.Remove(tableLayoutPanel); // Remove old panel (including existing buttons)
+
+            int vertScrollWidth = SystemInformation.VerticalScrollBarWidth;
+            // Create the table layout panel, configure it, and add it to the SCRIPT_BUTTON_PANEL controls
+            tableLayoutPanel = new TableLayoutPanel();
+            tableLayoutPanel.Dock = DockStyle.Fill;
+            tableLayoutPanel.ColumnCount = 1;
+            tableLayoutPanel.RowCount = scripts.Count;
+            tableLayoutPanel.AutoScroll = true;
+            tableLayoutPanel.Padding = new Padding(0, 0, vertScrollWidth, 0);
+            Script_Button_Panel.Controls.Add(tableLayoutPanel);
+
+            int buttonWidth = tableLayoutPanel.Width - vertScrollWidth - 4;
+            Padding buttonPadding = new Padding(2, 2, 0, 0);
+
+            for (int i = 0; i < scripts.Count; i++)
+            {
+                var s = scripts[i];
+
+                Button button = new Button();
+
+                button.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+                button.Text = s.sName;
+
+                button.Margin = buttonPadding;
+                button.Width = buttonWidth;
+
+                button.Click += (object sender, EventArgs e) =>
+                {
+                    Log($"4,{s.sId}");
+                    BroadcastMessage($"4,{s.sId}");
+                };
+
+                tableLayoutPanel.Controls.Add(button, 0, i);
             }
         }
 

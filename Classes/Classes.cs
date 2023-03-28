@@ -1,7 +1,11 @@
 ﻿
-//using System.Collections;
-using System.Collections.Generic;
+/*
+D2RApp - A MultiBoxing application for Diablo II Ressurrected.
+Copyright (c) Cliff Earl, Antix Development, 2023.
+MIT License.
+*/
 
+using System.Collections.Generic;
 
 namespace Classes
 {

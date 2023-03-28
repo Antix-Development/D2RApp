@@ -358,9 +358,9 @@ namespace D2RServer
             // 
             // Accept_Button
             // 
-            this.Accept_Button.Location = new System.Drawing.Point(426, 369);
+            this.Accept_Button.Location = new System.Drawing.Point(322, 369);
             this.Accept_Button.Name = "Accept_Button";
-            this.Accept_Button.Size = new System.Drawing.Size(125, 23);
+            this.Accept_Button.Size = new System.Drawing.Size(177, 23);
             this.Accept_Button.TabIndex = 116;
             this.Accept_Button.Text = "Save";
             this.Accept_Button.UseVisualStyleBackColor = true;
@@ -368,9 +368,9 @@ namespace D2RServer
             // 
             // Cancel_Button
             // 
-            this.Cancel_Button.Location = new System.Drawing.Point(557, 369);
+            this.Cancel_Button.Location = new System.Drawing.Point(505, 369);
             this.Cancel_Button.Name = "Cancel_Button";
-            this.Cancel_Button.Size = new System.Drawing.Size(125, 23);
+            this.Cancel_Button.Size = new System.Drawing.Size(177, 23);
             this.Cancel_Button.TabIndex = 117;
             this.Cancel_Button.Text = "Cancel";
             this.Cancel_Button.UseVisualStyleBackColor = true;

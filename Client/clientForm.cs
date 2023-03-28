@@ -1,23 +1,37 @@
-﻿using System;
+﻿/*
+D2RApp - A MultiBoxing application for Diablo II Ressurrected.
+Copyright (c) Cliff Earl, Antix Development, 2023.
+MIT License.
+*/
+
+using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Collections.Generic;
+
 using Newtonsoft.Json;
 using Gma.System.MouseKeyHook;
 using WindowsInput.Native;
 using WindowsInput;
 using LiteNetLib;
 
+using Classes;
+
 namespace D2RApp
 {
 
     public partial class client_Form : Form
     {
+        public List<D2RScript> scripts; // Scripts (sent from server)
+
         public EventBasedNetListener netListener;
         public NetManager netClient;
 
         public bool connected;
 
         public bool scriptRunning;
+        public D2RScript currentScript;
+        public int actionIndex;
 
         public InputSimulator inputSimulator;
 
@@ -54,7 +68,7 @@ namespace D2RApp
             netListener.PeerConnectedEvent += NetListener_PeerConnectedEvent;
             netListener.PeerDisconnectedEvent += NetListener_PeerDisconnectedEvent;
             netListener.NetworkReceiveEvent += NetListener_NetworkReceiveEvent;
-            timer1.Enabled = true;
+            Net_Timer.Enabled = true;
 
             scriptRunning = false;
         }
@@ -68,13 +82,16 @@ namespace D2RApp
         // Application shut-down
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            Script_Timer.Stop();
+
             // Stop client
-            timer1.Enabled = false;
+            Net_Timer.Enabled = false;
             netListener.PeerConnectedEvent -= NetListener_PeerConnectedEvent;
             netListener.PeerDisconnectedEvent -= NetListener_PeerDisconnectedEvent;
             netListener.NetworkReceiveEvent -= NetListener_NetworkReceiveEvent;
             netClient.Stop();
         }
+
         // Perform client polling stuff
         private void timer1_Tick(object sender, EventArgs e)
         {
@@ -84,10 +101,10 @@ namespace D2RApp
         // A message was received from the server
         private void NetListener_NetworkReceiveEvent(NetPeer peer, NetPacketReader reader, DeliveryMethod deliveryMethod)
         {
-            string data = reader.GetString(50); // Max data length
+            string data = reader.GetString(1000); // Max data length
             reader.Recycle();
 
-            //            Log($"Server: {data}"); // Max length of string
+            //Log($"Server: {data}"); // Max length of string
 
             string[] parts = data.Split(',');
 
@@ -133,67 +150,106 @@ namespace D2RApp
                     break;
 
                 // 
-                // Receive scripted actions
-                //
-
-                case "4":
-                    // TODO: decode received string to d2rscripts
-                    break;
-
-                // 
                 // Scripted action
                 //
 
-                case "5":
+                case "4":
                     // TODO: perform the given script
+
+                    Log($"script {parts[1]} requested.");
+
+                    if (!scriptRunning)
+                    {
+                        currentScript = scripts[Int16.Parse(parts[1])];
+                        actionIndex = 0;
+                        Script_Timer.Interval = currentScript.sActions[0].aDelay;
+                        Script_Timer.Start();
+                        Log($"{currentScript.sName}: {currentScript.sActions[0].aType}");
+
+                        scriptRunning = true;
+                    }
+
+                    else
+                    {
+                        Log($"server requested script {parts[1]} but script {currentScript.sId} already running!");
+                    }
+
+                    break;
+
+                // 
+                // The only other data the client can receive is updated scripts
+                // 
+
+                default:
+                    try
+                    {
+                        scripts = JsonConvert.DeserializeObject<List<D2RScript>>(data); // Deserialize scripts from received data
+                        scripts.Sort((a, b) => a.sId.CompareTo(b.sId)); // Sort scripts into ascending order
+
+                        for (int i = 0; i < scripts.Count; i++)
+                        {
+                            var s = (D2RScript)scripts[i]; // Next script
+                            s.sActions.Sort((a, b) => a.aId.CompareTo(b.aId)); // Sort actions belonging to the current script into ascending order
+                        }
+                        Console.WriteLine($"Received scripts from server at {TimeStamp()}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Log($"{ex.Message}");
+                    }
+                    break;
+            }
+        }
+
+        // Execute current scripted action and queue the next in the sequence
+        private void Script_Timer_Tick(object sender, EventArgs e)
+        {
+            Script_Timer.Stop();
+
+            // Execute action
+            var action = currentScript.sActions[actionIndex];
+
+            switch (action.aType)
+            {
+                case (D2RScriptedActionTypes.MouseMove):
+                    inputSimulator.Mouse.MoveMouseTo(action.aX * 65535 / (screenWidth + 1), action.aY * 65535 / (screenHeight + 1));
+                    break;
+
+                case (D2RScriptedActionTypes.LeftClick):
+                    inputSimulator.Mouse.LeftButtonClick();
+                    break;
+
+                case (D2RScriptedActionTypes.RightClick):
+                    inputSimulator.Mouse.RightButtonClick();
+                    break;
+
+                case (D2RScriptedActionTypes.KeyPress):
+                    inputSimulator.Keyboard.KeyPress((VirtualKeyCode)action.aKey);
                     break;
 
                 default:
                     break;
             }
+            Log($"{currentScript.sName}: Executed");
 
-/*
-            try
+            // Queue next action
+
+            actionIndex++;
+
+            if (actionIndex < currentScript.sActions.Count)
             {
-                int[] msg = JsonConvert.DeserializeObject<int[]>(data);
+                action = currentScript.sActions[actionIndex];
+                Script_Timer.Interval = action.aDelay;
+                Script_Timer.Start();
+            } 
 
-                switch (msg[0])
-                {
-                    case 0: // TODO: ping received
+            else
 
-                        break;
-
-                    case 1: // MouseMove
-                        inputSimulator.Mouse.MoveMouseTo(msg[1] * 65535 / screenWidth, msg[2] * 65535 / screenHeight);
-                        break;
-
-                    case 2: // MouseClick
-                        if (msg[1] == 1)
-                        {
-                            inputSimulator.Mouse.LeftButtonClick();
-                        }
-                        else
-                        {
-                            inputSimulator.Mouse.RightButtonClick();
-                        }
-                        break;
-
-                    case 3: // KeyPress
-                        inputSimulator.Keyboard.KeyPress((VirtualKeyCode)msg[1]);
-
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-            catch (Exception ex)
             {
-                Log(ex.Message);
+                scriptRunning = false; // Done
             }
-*/
-
         }
+
 
         // Established connection to server
         private void NetListener_PeerConnectedEvent(NetPeer peer)

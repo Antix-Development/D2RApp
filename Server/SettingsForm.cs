@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+D2RApp - A MultiBoxing application for Diablo II Ressurrected.
+Copyright (c) Cliff Earl, Antix Development, 2023.
+MIT License.
+*/
+
+using System;
 using System.Windows.Forms;
 
 using Classes;
@@ -164,10 +170,8 @@ namespace D2RServer
         {
             if (selectedAction != null)
             {
-                Console.WriteLine($"selected action != null");
                 if (selectedScript.sActions.Count != 1) // For all actions after the one to be deleted...
                 {
-
                     for (int i = selectedAction.aId + 1; i < selectedScript.sActions.Count; i++)
                     {
                         GetActionWithID(i).aId--; // Decrement action id
@@ -549,6 +553,8 @@ namespace D2RServer
                 Actions_ListBox.Items.Clear();
 
                 selectedAction = null;
+
+                NewAction_Button.Enabled = true;
 
                 ActionKey_Button.Enabled = false;
                 ActionX_TextBox.Enabled = false;
