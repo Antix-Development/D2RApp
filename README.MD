@@ -91,7 +91,15 @@ I only have two Diablo II Ressurrected licences so D2RApp has only been tested w
 
 This is my first C# project since I used it whilst working towards my Computer Science degree, it's probably pretty tragic ;)
 
+D2RApp employs the following fantastic packages...
+[LiteNetLib](https://github.com/RevenantX/LiteNetLib) - Providing fast networking between master and slave computers.
+[GlobalMouseKeyHook](https://github.com/gmamaladze/globalmousekeyhook) - For capturing global mouse and key events on oth master and slave computers.
+[InputSimulator](https://github.com/michaelnoonan/inputsimulator) - Allows input events to be injected into the system on slave computers.
+[Json.NET](https://github.com/JamesNK/Newtonsoft.Json) - Used for transport and persisting of scripts.
+
 Feel free to fork this repository and make your own crazy creations, just fire me a message.. I'd love to see what other people manage to do with it.
+
+And finally, if you use D2RApp, maybe you would consider [buying me a coffee](https://www.buymeacoffee.com/antixdevelu), or gift me some nice runes ;)
 
 ### DISCLAIMER
 Now I did a bunch of searching on the internet and coudn't find anything about using such software as this with Diablo II Ressurrected. There is some mention of using input mirroring software with World Of Warcraft, but as far as I could see, nothing directly related to Diablo II Ressurrected.
