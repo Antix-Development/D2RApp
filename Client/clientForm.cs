@@ -156,7 +156,7 @@ namespace D2RApp
                 case "4":
                     // TODO: perform the given script
 
-                    Log($"script {parts[1]} requested.");
+                    //Console.WriteLine($"script {parts[1]} requested.");
 
                     if (!scriptRunning)
                     {
@@ -164,14 +164,14 @@ namespace D2RApp
                         actionIndex = 0;
                         Script_Timer.Interval = currentScript.sActions[0].aDelay;
                         Script_Timer.Start();
-                        Log($"{currentScript.sName}: {currentScript.sActions[0].aType}");
+                        //Console.WriteLine($"{currentScript.sName}: {currentScript.sActions[0].aType}");
 
                         scriptRunning = true;
                     }
 
                     else
                     {
-                        Log($"server requested script {parts[1]} but script {currentScript.sId} already running!");
+                        //Console.WriteLine($"server requested script {parts[1]} but script {currentScript.sId} already running!");
                     }
 
                     break;
@@ -195,7 +195,7 @@ namespace D2RApp
                     }
                     catch (Exception ex)
                     {
-                        Log($"{ex.Message}");
+                        //Console.WriteLine($"{ex.Message}");
                     }
                     break;
             }
@@ -230,7 +230,7 @@ namespace D2RApp
                 default:
                     break;
             }
-            Log($"{currentScript.sName}: Executed");
+            //Console.WriteLine($"{currentScript.sName}: Executed");
 
             // Queue next action
 
@@ -257,7 +257,7 @@ namespace D2RApp
             connected = true;
             Connection_Button.Text = "Disconnect";
 
-            Log($"Connected to {peer.EndPoint} at {TimeStamp()}.");
+            //Console.WriteLine($"Connected to {peer.EndPoint} at {TimeStamp()}.");
         }
 
         // Lost connection to server
@@ -266,7 +266,7 @@ namespace D2RApp
             Connection_Button.Text = "Connect";
             connected = false;
 
-            Log($"Disconnected from {peer.EndPoint} at {TimeStamp()}.");
+            //Console.WriteLine($"Disconnected from {peer.EndPoint} at {TimeStamp()}.");
         }
 
         // Attempt to disconnect from the server if already connected, otherwise attempt to connect to the server
@@ -274,7 +274,7 @@ namespace D2RApp
         {
             if (connected)
             {
-                Log("TODO: initiate a manual disconnect?");
+                //Console.WriteLine("TODO: initiate a manual disconnect?");
 
             } else
             {
@@ -284,7 +284,7 @@ namespace D2RApp
                 }
                 catch (Exception ex)
                 {
-                    Log(ex.Message); // Server could not be reached
+                    //Console.WriteLine(ex.Message); // Server could not be reached
                 }
             }
         }
@@ -302,12 +302,12 @@ namespace D2RApp
         }
 
         // Append the given text to the log textbox
-        private void Log(string text)
-        {
-            Log_TextBox.AppendText(text);
-            Log_TextBox.AppendText(Environment.NewLine);
-            Log_TextBox.ScrollToCaret();
-        }
+        //private void Log(string text)
+        //{
+        //    Log_TextBox.AppendText(text);
+        //    Log_TextBox.AppendText(Environment.NewLine);
+        //    Log_TextBox.ScrollToCaret();
+        //}
 
     }
 }

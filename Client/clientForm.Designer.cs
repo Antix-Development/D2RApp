@@ -33,7 +33,6 @@ namespace D2RApp
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(client_Form));
             this.Connection_Button = new System.Windows.Forms.Button();
             this.ServerIP_TextBox = new System.Windows.Forms.TextBox();
-            this.Log_TextBox = new System.Windows.Forms.TextBox();
             this.MousePosition_Label = new System.Windows.Forms.Label();
             this.ServerPort_TextBox = new System.Windows.Forms.TextBox();
             this.Net_Timer = new System.Windows.Forms.Timer(this.components);
@@ -58,16 +57,6 @@ namespace D2RApp
             this.ServerIP_TextBox.TabIndex = 2;
             this.ServerIP_TextBox.Text = "192.168.64.200";
             // 
-            // Log_TextBox
-            // 
-            this.Log_TextBox.Location = new System.Drawing.Point(12, 38);
-            this.Log_TextBox.Multiline = true;
-            this.Log_TextBox.Name = "Log_TextBox";
-            this.Log_TextBox.ReadOnly = true;
-            this.Log_TextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.Log_TextBox.Size = new System.Drawing.Size(266, 108);
-            this.Log_TextBox.TabIndex = 3;
-            // 
             // MousePosition_Label
             // 
             this.MousePosition_Label.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -83,7 +72,7 @@ namespace D2RApp
             this.ServerPort_TextBox.Name = "ServerPort_TextBox";
             this.ServerPort_TextBox.Size = new System.Drawing.Size(37, 20);
             this.ServerPort_TextBox.TabIndex = 9;
-            this.ServerPort_TextBox.Text = "90008";
+            this.ServerPort_TextBox.Text = "9000";
             // 
             // Net_Timer
             // 
@@ -98,10 +87,9 @@ namespace D2RApp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(289, 158);
+            this.ClientSize = new System.Drawing.Size(289, 43);
             this.Controls.Add(this.ServerPort_TextBox);
             this.Controls.Add(this.MousePosition_Label);
-            this.Controls.Add(this.Log_TextBox);
             this.Controls.Add(this.ServerIP_TextBox);
             this.Controls.Add(this.Connection_Button);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -119,7 +107,6 @@ namespace D2RApp
 
         private System.Windows.Forms.Button Connection_Button;
         private System.Windows.Forms.TextBox ServerIP_TextBox;
-        private System.Windows.Forms.TextBox Log_TextBox;
         private System.Windows.Forms.Label MousePosition_Label;
         private System.Windows.Forms.TextBox ServerPort_TextBox;
         private System.Windows.Forms.Timer Net_Timer;

@@ -90,7 +90,7 @@ namespace D2RServer
             m_GlobalHook.MouseMove += M_GlobalHook_MouseMove;
             m_GlobalHook.MouseClick += M_GlobalHook_MouseClick;
 
-            Log($"Server started at {TimeStamp()}.");
+            //Console.WriteLine($"Server started at {TimeStamp()}.");
         }
 
         // Application shut-down
@@ -122,7 +122,7 @@ namespace D2RServer
         {
             if (altHeld)
             {
-                //Log($"MouseMove: {e.X}, {e.Y}, {e.Button}");
+                //Console.WriteLine($"MouseMove: {e.X}, {e.Y}, {e.Button}");
 
                 BroadcastMessage($"1,{e.X},{e.Y}");
             }
@@ -133,7 +133,7 @@ namespace D2RServer
         {
             if (altHeld)
             {
-                //Log($"MouseClick: {e.X}, {e.Y}, {e.Button}");
+                //Console.WriteLine($"MouseClick: {e.X}, {e.Y}, {e.Button}");
 
                 int button = 0;
                 switch (e.Button)
@@ -158,7 +158,7 @@ namespace D2RServer
         // Send intercepted KeyUp event to all connected clients if the ALT key is held
         private void M_GlobalHook_KeyUp(object sender, KeyEventArgs e)
         {
-            Log($"code:{e.KeyCode} value:{e.KeyValue}");
+            //Console.WriteLine($"code:{e.KeyCode} value:{e.KeyValue}");
 
             if ((e.KeyCode == Keys.LMenu || e.KeyCode == Keys.RMenu) && altHeld)
             {
@@ -186,7 +186,7 @@ namespace D2RServer
             {
                 // Nothing needs to happen when a key is pressed down, because we really don't care about keys other than the ALT key
 
-                //Log($"KeyDown: Code:{e.KeyCode}, Value:{e.KeyValue}(0x{e.KeyValue.ToString("X2")}), alt:{e.Alt}");
+                //Console.WriteLine($"KeyDown: Code:{e.KeyCode}, Value:{e.KeyValue}(0x{e.KeyValue.ToString("X2")}), alt:{e.Alt}");
             }
         }
 
@@ -205,14 +205,14 @@ namespace D2RServer
                 request.AcceptIfKey("D2RApp");
             else
                 request.Reject();
-                Log($"Refused connection from {request.RemoteEndPoint.Address} at {TimeStamp()}");
+                //Console.WriteLine($"Refused connection from {request.RemoteEndPoint.Address} at {TimeStamp()}");
         }
 
         // A client connected to the server
         private void NetListener_PeerConnectedEvent(NetPeer peer)
         {
-            Clients_ListBox.Items.Add(peer.EndPoint);
-            Log($"{peer.EndPoint} connected at {TimeStamp()}");
+            //Clients_ListBox.Items.Add(peer.EndPoint);
+            //Console.WriteLine($"{peer.EndPoint} connected at {TimeStamp()}");
 
             netWriter.Put(JsonConvert.SerializeObject(scripts));
             peer.Send(netWriter, DeliveryMethod.ReliableOrdered);
@@ -222,9 +222,8 @@ namespace D2RServer
         // A client disconnected from the server
         private void NetListener_PeerDisconnectedEvent(NetPeer peer, DisconnectInfo disconnectInfo)
         {
-            Clients_ListBox.Items.Remove(peer.EndPoint);
-
-            Log($"{peer.EndPoint} disconnected at {TimeStamp()}");
+            //Clients_ListBox.Items.Remove(peer.EndPoint);
+            //Console.WriteLine($"{peer.EndPoint} disconnected at {TimeStamp()}");
         }
 
         // User clicked the "Edit Scripts" button
@@ -308,7 +307,7 @@ namespace D2RServer
 
                 button.Click += (object sender, EventArgs e) =>
                 {
-                    Log($"4,{s.sId}");
+                    //Console.WriteLine($"4,{s.sId}");
                     BroadcastMessage($"4,{s.sId}");
                 };
 
@@ -320,14 +319,6 @@ namespace D2RServer
         private string TimeStamp()
         {
             return DateTime.Now.ToString("dd/MM/yyyy h:mm:ss");
-        }
-
-        // Append the given text to the log textbox
-        private void Log(string text)
-        {
-            Log_TextBox.AppendText(text);
-            Log_TextBox.AppendText(Environment.NewLine);
-            Log_TextBox.ScrollToCaret();
         }
 
     }

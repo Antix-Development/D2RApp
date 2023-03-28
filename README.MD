@@ -3,11 +3,11 @@
 
 # D2RApp
 
+![Client Interface](Images/client.png)
+
+![Server Interface](Images/server.png)
+
 ### About
-
-D2RAPP IS CURRENTLY IN DEVELOPMENT AND IS NOT FULLY FUNCTIONAL. WHEN THIS BLOCK OF TEXT IS REMOVED, IT IS READY TO BE USED ;)
-
-
 
 D2RApp is an application written in C# that enables the user to mirror MouseMove, MouseClick, and KeyPress input events from one master computer to multiple connected slave computers, where the input events are sent from the master to the slaves when the ALT key is being held down.
 
@@ -33,13 +33,17 @@ When a slave computer connects to the server, the server will transmit the curre
 
 Once slaves are connected, you can mirror input events on all connected slave computers from the master computer when the `ALT` key is being held down.
 
-*TIP* I hold the `SHIFT` key down when mirroring mouse clicks so that my character on my master computer does not walk off randomly when I want to click on the slave computer.
+*TIP* I hold the `SHIFT` key down when mirroring mouse clicks so that my character on my master computer does not walk off randomly when I want my character on the slave computer to move.
 
 ### Scripts
 
 ![Script Editor Interface](Images/script_editor.png)
 
-Editing scripts...
+*Using Scripts...*
+
+If you have created some scripts, they will be visible on the "Scripts" list in the main window. Clicking any of these buttons will cause that script to be executed on all connected slave computers.
+
+*Editing scripts...*
 
 From the main window, click the `Edit Scripts` button to open the script editor window, then in that window..
 
@@ -69,19 +73,9 @@ Click the `Key` button which will cause D2RApp to start waiting for your desired
 Press the key you want the "Keypress" action to press.
 Currently the valid keys are... (a-z) (0-9) (F1-F12) (;=,-./`) ([\]')
 
-All actions will have their execution delayed by the number of milliseconds specified in the `Delay` textbox.
+*NOTE:* All actions will have their execution delayed by the number of milliseconds specified in the `Delay` textbox.
 
-
-
-
-Clicking the "Accept" button on the "Settings" form, the server will broadcast all scripts to all connected clients, and also save the scripts locally in D2RApp's folder.'
-
-
-
-
-Really you just need to run the software and have a play with it.
-
-I don't think it's terribly difficult to figure it out and if there is something that it does not do, then you can always add that functionality yourself.
+Clicking the `Save` button in the "Edit Scripts" window will cause the master computer to broadcast all scripts to all connected slave computers, and also save the scripts locally in D2RApp's folder.'
 
 ### Notes
 
