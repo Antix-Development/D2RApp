@@ -27,7 +27,7 @@ Put your Diablo II Ressurrected computers into windowed mode (`ALT` + `ENTER`) a
 
 Start the `Server` application on your master computer, and run the `Client` application on all slave computers.
 
-On each slave computer enter the IP Address and Port number of the Server (which will be displayed in the Servers title bar), and click the `Connect` button.
+On each slave computer enter the IP Address and Port number of the master computer (which will be displayed in the Servers title bar), and click the `Connect` button.
 
 When a slave computer connects to the server, the server will transmit the currently loaded scripts to that slave.
 
@@ -39,11 +39,11 @@ Once slaves are connected, you can mirror input events on all connected slave co
 
 ![Script Editor Interface](Images/script_editor.png)
 
-*Using Scripts...*
+**Using Scripts...**
 
 If you have created some scripts, they will be visible on the "Scripts" list in the main window. Clicking any of these buttons will cause that script to be executed on all connected slave computers.
 
-*Editing scripts...*
+**Editing scripts...**
 
 From the main window, click the `Edit Scripts` button to open the script editor window, then in that window..
 
@@ -58,20 +58,26 @@ Once created you can change its execution order in the action list, delete it, a
 An action can be one of four types:
 
 #### MouseMove
+
 Click the `MouseMove` radiobutton to change the currently selected actions type to "MouseMove".
+
 Change the values of the `X` and `Y` textboxes to set the position on the slave computer(s) that the action will move the mouse to.
 
 #### LeftClick
+
 Click the `LeftClick` radiobutton to change the currently selected actions type to "LeftClick".
 
 #### RightClick
+
 Click the `RightClick` radiobutton to change the currently selected actions type to "RightClick".
 
 #### KeyPress.
+
 Click the `KeyPress` radiobutton to change the currently selected actions type to "KeyPress".
+
 Click the `Key` button which will cause D2RApp to start waiting for your desired key to br pressed.
-Press the key you want the "Keypress" action to press.
-Currently the valid keys are... (a-z) (0-9) (F1-F12) (;=,-./`) ([\]')
+
+Press the key you want the "Keypress" action to press. Currently the valid keys are... (a-z) (0-9) (F1-F12) (;=,-./`) ([\]')
 
 *NOTE:* All actions will have their execution delayed by the number of milliseconds specified in the `Delay` textbox.
 
