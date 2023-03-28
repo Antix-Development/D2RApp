@@ -3,7 +3,7 @@
 
 ## D2RApp
 
-![Client Interface](Images/client.png) ![Server Interface](Images/server.png)
+![Server Interface](Images/server.png) ![Client Interface](Images/client.png)
 
 ### About
 
