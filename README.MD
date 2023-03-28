@@ -1,13 +1,13 @@
 
 <div align="justify">
 
-# D2RApp
+## D2RApp
 
-![Client Interface](Images/client.png)
-
-![Server Interface](Images/server.png)
+![Client Interface](Images/client.png) ![Server Interface](Images/server.png)
 
 ### About
+
+D2RApp is a multiboxing application for Diablo II Ressurrected, which allows you to control multiple copies of the game client (running on different computers) using a single keyboard and mouse.
 
 D2RApp is an application written in C# that enables the user to mirror MouseMove, MouseClick, and KeyPress input events from one master computer to multiple connected slave computers, where the input events are sent from the master to the slaves when the ALT key is being held down.
 
@@ -20,11 +20,13 @@ As well as being able to generate input events on slave computers, the master co
 <hr>
 
 ### Installation
+
 D2RApp is portable so just download the latest release and unzip it somewhere.
 
 <hr>
 
 ### Use
+
 Start Diablo II Ressurrected on your master and slave computers.
 
 Put your Diablo II Ressurrected computers into windowed mode (`ALT` + `ENTER`) and press `WINDOWS` + `ARROWUP` to make the program fill the screen properly in windowed mode (IMHO).
@@ -95,14 +97,18 @@ Press the key you want the "Keypress" action to press. Currently the valid keys 
 
 D2RApp was written to work with my own personal setup which is two separate Windows10 computers, each running one copy of Diablo II Ressurrected in windowed mode. Your mileage may vary wildly with other configurations.
 
-I only have two Diablo II Ressurrected licences so D2RApp has only been tested working with one slave.
+I only have two Diablo II Ressurrected licenses so D2RApp has only been tested working with one slave.
 
 This is my first C# project since I used it whilst working towards my Computer Science degree, it's probably pretty tragic ;)
 
-D2RApp employs the following fantastic packages...
+For D2RApp to work it's magic, it employs the following fantastic packages...
+
 [LiteNetLib](https://github.com/RevenantX/LiteNetLib) - Providing fast networking between master and slave computers.
+
 [GlobalMouseKeyHook](https://github.com/gmamaladze/globalmousekeyhook) - For capturing global mouse and key events on oth master and slave computers.
+
 [InputSimulator](https://github.com/michaelnoonan/inputsimulator) - Allows input events to be injected into the system on slave computers.
+
 [Json.NET](https://github.com/JamesNK/Newtonsoft.Json) - Used for transport and persisting of scripts.
 
 Feel free to fork this repository and make your own crazy creations, just fire me a message.. I'd love to see what other people manage to do with it.
