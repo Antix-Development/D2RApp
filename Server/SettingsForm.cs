@@ -30,6 +30,7 @@ namespace D2RServer
             FormClosing += ScriptEditor_FormClosing; // Install "cleanup" code
         }
 
+        // Cleanup after user closes the application
         private void ScriptEditor_FormClosing(object sender, FormClosingEventArgs e)
         {
             Actions_ListBox.SelectedIndex = -1;
@@ -46,12 +47,10 @@ namespace D2RServer
         // Application start-up
         private void SettingsForm_Load(object sender, EventArgs e)
         {
-
             // Popululate list of scripts
             for (int i = 0; i < serverForm.scripts.Count; i++)
             {
-                var script = serverForm.scripts[i];
-                Scripts_ListBox.Items.Add(script.sName);
+                Scripts_ListBox.Items.Add(serverForm.scripts[i].sName);
             }
 
             // Install keyboard handlers
@@ -310,7 +309,11 @@ namespace D2RServer
 
         private void Actions_ListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (Actions_ListBox.SelectedIndex == -1) return;
+            if (Actions_ListBox.SelectedIndex == -1)
+            {
+                ActionDelay_TextBox.Enabled = false;
+                return;
+            }
 
             if (Actions_ListBox.SelectedIndex != selectedActionIndex)
             {
@@ -326,6 +329,8 @@ namespace D2RServer
         // Enable or disable action controls
         private void SetActioncontrols()
         {
+            ActionDelay_TextBox.Enabled = true;
+
             Actions_GroupBox.Enabled = true;
 
             ActionType_GroupBox.Enabled = true;
@@ -514,6 +519,10 @@ namespace D2RServer
 
                 selectedScriptIndex = Scripts_ListBox.SelectedIndex;
                 ScriptName_TextBox.Enabled = true;
+
+                selectedAction = null;
+                selectedActionIndex = -2;
+                Actions_ListBox.SelectedIndex = -1;
             }
             UpdateScriptControls();
         }

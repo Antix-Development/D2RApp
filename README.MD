@@ -37,6 +37,8 @@ Once slaves are connected, you can mirror input events on all connected slave co
 
 ### Scripts
 
+![Script Editor Interface](Images/script_editor.png)
+
 Editing scripts...
 
 From the main window, click the `Edit Scripts` button to open the script editor window, then in that window..
