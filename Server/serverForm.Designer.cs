@@ -30,6 +30,7 @@ namespace D2RServer
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(serverForm));
             this.Clients_ListBox = new System.Windows.Forms.ListBox();
             this.Log_TextBox = new System.Windows.Forms.TextBox();
             this.Settings_Button = new System.Windows.Forms.Button();
@@ -114,9 +115,9 @@ namespace D2RServer
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.Log_TextBox);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "serverForm";
-            this.ShowIcon = false;
             this.Text = "D2RApp";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.Form1_Load);

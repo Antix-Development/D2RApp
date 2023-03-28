@@ -7,8 +7,8 @@
     <ProjectGuid>{F80490FC-CDF2-4CA9-974F-281EEF333BB0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Classes</RootNamespace>
-    <AssemblyName>Classes</AssemblyName>
+    <RootNamespace>D2RClasses</RootNamespace>
+    <AssemblyName>D2RClasses</AssemblyName>
     <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

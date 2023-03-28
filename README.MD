@@ -11,7 +11,7 @@ D2RAPP IS CURRENTLY IN DEVELOPMENT AND IS NOT FULLY FUNCTIONAL. WHEN THIS BLOCK 
 
 D2RApp is an application written in C# that enables the user to mirror MouseMove, MouseClick, and KeyPress input events from one master computer to multiple connected slave computers, where the input events are sent from the master to the slaves when the ALT key is being held down.
 
-It might seem strange but this enables me to be able to have two client copies of Diablo II Ressurrected running on two separate computers and be able to control both running clients with one keyboard and mouse.
+It might seem strange but this enables the user to be able to have two client copies of Diablo II Ressurrected running on two separate computers and be able to control both running clients with one keyboard and mouse.
 
 Its all pretty basic but it meets my simple requirements and I thought I'd make it public just incase anyone else was looking for the same thing.
 
@@ -21,17 +21,32 @@ As well as being able to generate input events on slave computers, the master co
 D2RApp is portable so just download the latest release and unzip it somewhere.
 
 ### Use
+Start Diablo II Ressurrected on your master and slave computers.
+
+Put your Diablo II Ressurrected computers into windowed mode (`ALT` + `ENTER`) and press `WINDOWS` + `ARROWUP` to make the program fill the screen properly in windowed mode (IMHO).
+
 Start the `Server` application on your master computer, and run the `Client` application on all slave computers.
 
-On each slave computer enter the IP Address and Port number of the Server, which will be displayed in the Servers title bar.
+On each slave computer enter the IP Address and Port number of the Server (which will be displayed in the Servers title bar), and click the `Connect` button.
 
-**need to put text about scripts here**
+When a slave computer connects to the server, the server will transmit the currently loaded scripts to that slave.
+
+Once slaves are connected, you can mirror input events on all connected slave computers from the master computer when the `ALT` key is being held down.
+
+*TIP* I hold the `SHIFT` key down when mirroring mouse clicks so that my character on my master computer does not walk off randomly when I want to click on the slave computer.
+
+### Scripts
 
 Editing scripts...
+
 From the main window, click the `Edit Scripts` button to open the script editor window, then in that window..
+
 Click `New Script` to create a new script.
+
 Once it has been created you can edit its name, change its order in the script list, delete it, and add actions to it.
+
 Click the `Add Action` button to add a new action to the currently selected script.
+
 Once created you can change its execution order in the action list, delete it, and modify its various parameters.
 
 An action can be one of four types:
