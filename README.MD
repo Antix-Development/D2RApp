@@ -17,8 +17,12 @@ Its all pretty basic but it meets my simple requirements and I thought I'd make 
 
 As well as being able to generate input events on slave computers, the master computer can also command slave computers to execute a script (a sequence of actions).
 
+<hr>
+
 ### Installation
 D2RApp is portable so just download the latest release and unzip it somewhere.
+
+<hr>
 
 ### Use
 Start Diablo II Ressurrected on your master and slave computers.
@@ -34,6 +38,8 @@ When a slave computer connects to the server, the server will transmit the curre
 Once slaves are connected, you can mirror input events on all connected slave computers from the master computer when the `ALT` key is being held down.
 
 *TIP* I hold the `SHIFT` key down when mirroring mouse clicks so that my character on my master computer does not walk off randomly when I want my character on the slave computer to move.
+
+<hr>
 
 ### Scripts
 
@@ -54,6 +60,10 @@ Once it has been created you can edit its name, change its order in the script l
 Click the `Add Action` button to add a new action to the currently selected script.
 
 Once created you can change its execution order in the action list, delete it, and modify its various parameters.
+
+Clicking the `Save` button in the "Edit Scripts" window will cause the master computer to broadcast all scripts to all connected slave computers, and also save the scripts locally in D2RApp's folder.'
+
+*NOTE:* All actions will have their execution delayed by the number of milliseconds specified in the `Delay` textbox.
 
 An action can be one of four types:
 
@@ -79,9 +89,7 @@ Click the `Key` button which will cause D2RApp to start waiting for your desired
 
 Press the key you want the "Keypress" action to press. Currently the valid keys are... (a-z) (0-9) (F1-F12) (;=,-./`) ([\]')
 
-*NOTE:* All actions will have their execution delayed by the number of milliseconds specified in the `Delay` textbox.
-
-Clicking the `Save` button in the "Edit Scripts" window will cause the master computer to broadcast all scripts to all connected slave computers, and also save the scripts locally in D2RApp's folder.'
+<hr>
 
 ### Notes
 
@@ -100,6 +108,8 @@ D2RApp employs the following fantastic packages...
 Feel free to fork this repository and make your own crazy creations, just fire me a message.. I'd love to see what other people manage to do with it.
 
 And finally, if you use D2RApp, maybe you would consider [buying me a coffee](https://www.buymeacoffee.com/antixdevelu), or gift me some nice runes ;)
+
+<hr>
 
 ### DISCLAIMER
 Now I did a bunch of searching on the internet and coudn't find anything about using such software as this with Diablo II Ressurrected. There is some mention of using input mirroring software with World Of Warcraft, but as far as I could see, nothing directly related to Diablo II Ressurrected.
