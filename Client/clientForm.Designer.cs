@@ -37,13 +37,15 @@ namespace D2RApp
             this.ServerPort_TextBox = new System.Windows.Forms.TextBox();
             this.Net_Timer = new System.Windows.Forms.Timer(this.components);
             this.Script_Timer = new System.Windows.Forms.Timer(this.components);
+            this.Status_Label = new System.Windows.Forms.Label();
+            this.Status_Timer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // Connection_Button
             // 
             this.Connection_Button.Location = new System.Drawing.Point(155, 12);
             this.Connection_Button.Name = "Connection_Button";
-            this.Connection_Button.Size = new System.Drawing.Size(56, 20);
+            this.Connection_Button.Size = new System.Drawing.Size(70, 20);
             this.Connection_Button.TabIndex = 0;
             this.Connection_Button.Text = "Connect";
             this.Connection_Button.UseVisualStyleBackColor = true;
@@ -60,7 +62,7 @@ namespace D2RApp
             // MousePosition_Label
             // 
             this.MousePosition_Label.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.MousePosition_Label.Location = new System.Drawing.Point(217, 12);
+            this.MousePosition_Label.Location = new System.Drawing.Point(231, 12);
             this.MousePosition_Label.Name = "MousePosition_Label";
             this.MousePosition_Label.Size = new System.Drawing.Size(61, 20);
             this.MousePosition_Label.TabIndex = 8;
@@ -83,11 +85,25 @@ namespace D2RApp
             // 
             this.Script_Timer.Tick += new System.EventHandler(this.Script_Timer_Tick);
             // 
+            // Status_Label
+            // 
+            this.Status_Label.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.Status_Label.Location = new System.Drawing.Point(12, 35);
+            this.Status_Label.Name = "Status_Label";
+            this.Status_Label.Size = new System.Drawing.Size(280, 20);
+            this.Status_Label.TabIndex = 10;
+            this.Status_Label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // Status_Timer
+            // 
+            this.Status_Timer.Tick += new System.EventHandler(this.Status_Timer_Tick);
+            // 
             // client_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(289, 43);
+            this.ClientSize = new System.Drawing.Size(306, 66);
+            this.Controls.Add(this.Status_Label);
             this.Controls.Add(this.ServerPort_TextBox);
             this.Controls.Add(this.MousePosition_Label);
             this.Controls.Add(this.ServerIP_TextBox);
@@ -111,6 +127,8 @@ namespace D2RApp
         private System.Windows.Forms.TextBox ServerPort_TextBox;
         private System.Windows.Forms.Timer Net_Timer;
         private System.Windows.Forms.Timer Script_Timer;
+        private System.Windows.Forms.Label Status_Label;
+        private System.Windows.Forms.Timer Status_Timer;
     }
 }
 

@@ -132,20 +132,33 @@ namespace D2RServer
 
         private void ActionDelay_TextBox_TextChanged(object sender, EventArgs e)
         {
-            selectedAction.aDelay = Int16.Parse(ActionDelay_TextBox.Text);
+            selectedAction.aDelay = GetIntFromText(ActionDelay_TextBox.Text);
             Actions_ListBox.Items[selectedAction.aId] = ActionToString(selectedAction);
         }
 
         private void ActionX_TextBox_TextChanged(object sender, EventArgs e)
         {
-            selectedAction.aX = Int16.Parse(ActionX_TextBox.Text);
+            selectedAction.aX = GetIntFromText(ActionX_TextBox.Text);
             Actions_ListBox.Items[selectedAction.aId] = ActionToString(selectedAction);
         }
 
         private void ActionY_TextBox_TextChanged(object sender, EventArgs e)
         {
-            selectedAction.aY = Int16.Parse(ActionY_TextBox.Text);
+            selectedAction.aY = GetIntFromText(ActionY_TextBox.Text);
             Actions_ListBox.Items[selectedAction.aId] = ActionToString(selectedAction);
+        }
+
+        private int GetIntFromText(string number)
+        {
+            try
+            {
+                return Int32.Parse(number);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"{ex.Message}");
+                return 0;
+            }
         }
 
         private void NewAction_Button_Click(object sender, EventArgs e)
@@ -309,32 +322,33 @@ namespace D2RServer
 
         private void Actions_ListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (Actions_ListBox.SelectedIndex == -1)
-            {
-                ActionDelay_TextBox.Enabled = false;
-                return;
-            }
+            if (Actions_ListBox.SelectedIndex == -1) return;
+
 
             if (Actions_ListBox.SelectedIndex != selectedActionIndex)
             {
+                Console.WriteLine($"Actions_ListBox_SelectedIndexChanged() {Actions_ListBox.SelectedIndex}, {selectedActionIndex}");
+
                 selectedAction = GetActionWithID(Actions_ListBox.SelectedIndex);
 
                 selectedActionIndex = Actions_ListBox.SelectedIndex;
-            }
-            UpdateActionControls();
 
-            SetActioncontrols();
+                UpdateActionControls();
+
+                SetActioncontrols();
+
+            }
         }
 
         // Enable or disable action controls
         private void SetActioncontrols()
         {
-            ActionDelay_TextBox.Enabled = true;
 
             Actions_GroupBox.Enabled = true;
-
             ActionType_GroupBox.Enabled = true;
+
             ActionDelay_TextBox.Text = $"{selectedAction.aDelay}";
+            ActionDelay_TextBox.Enabled = true;
 
             switch (selectedAction.aType)
             {
@@ -397,6 +411,10 @@ namespace D2RServer
                 {
                     ActionUp_Button.Enabled = true;
                 }
+            }
+            else
+            {
+                ActionDelay_TextBox.Enabled = false;
             }
         }
 

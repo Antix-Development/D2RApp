@@ -7,6 +7,10 @@
 
 ### About
 
+**IMPORTANT:** USING THIS APPLICATION ONLINE IS A BREACH OF BLIZZARDS CODE OF CONDUCT AND MAY RESULT IN YOUR ACCOUTS BEING BANNED, USE IT AT YOUR OWN RISK.
+
+IT MIGHT BE FINE TO USE IN OFFLINE MODE BUT AT THE TIME OF WRITING THIS, i AM WAITING FOR CLARIFICATION FROM BLIZZARD.
+
 D2RApp is a multiboxing application for Diablo II Ressurrected, which allows you to control multiple copies of the game client (running on different computers) using a single keyboard and mouse.
 
 D2RApp is an application written in C# that enables the user to mirror MouseMove, MouseClick, and KeyPress input events from one master computer to multiple connected slave computers, where the input events are sent from the master to the slaves when the ALT key is being held down.
@@ -21,9 +25,16 @@ As well as being able to generate input events on slave computers, the master co
 
 ### What's New?
 
-v1.0.0 (29 Mar 2023)
+v1.0.1 (30 Mar 2023)
+
+- Resolved numeric input crashes and strange behavior.
+- Added status output to client.
+
+<details><summary>v1.0.0 (29 Mar 2023)</summary><p>
 
 - Initial public release.
+
+</p></details>
 
 <hr>
 
@@ -124,16 +135,3 @@ Input lag on slave computers will depend entirely on network latency. As of writ
 Feel free to fork this repository and make your own crazy creations, just fire me a message.. I'd love to see what other people manage to do with it.
 
 And finally, if you use D2RApp, maybe you would consider [buying me a coffee](https://www.buymeacoffee.com/antixdevelu), or gift me some nice runes ;)
-
-<hr>
-
-### DISCLAIMER
-Now I did a bunch of searching on the internet and coudn't find anything about using such software as this with Diablo II Ressurrected. There is some mention of using input mirroring software with World Of Warcraft, but as far as I could see, nothing directly related to Diablo II Ressurrected.
-
-The takeaway from this is as follows...
-
-USE THIS SOFTWARE AT YOUR OWN RISK. IF YOUR ACCOUNT(S) GETS BANNED BECAUSE BLIZZARD DEEM YOU CHEATED THEN THAT'S ON YOU, TOTALLY YOU, AND NO-ONE ELSE. DO NOT WHINGE TO ME, BECAUSE YOU HAVE BEEN ADEQUATELY WARNED.
-
-Furthermore...
-
-I DO NOT USE OR CONDONE THE USE OF BOTS TO AUTOMATE ITEM FARMING IN D2R (OR ANY GAME) AND THIS SOFTWARE WAS IN NO WAY DESIGNED WITH THE AIM OF ENABLING THAT. I WOULD HOPE THAT YOU DO NOT TAKE THIS SOFTWARE AND USE IT FOR SUCH THINGS.

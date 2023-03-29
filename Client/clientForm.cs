@@ -101,10 +101,8 @@ namespace D2RApp
         // A message was received from the server
         private void NetListener_NetworkReceiveEvent(NetPeer peer, NetPacketReader reader, DeliveryMethod deliveryMethod)
         {
-            string data = reader.GetString(); // Max data length
+            string data = reader.GetString(); // Read data (no limit on size)
             reader.Recycle();
-
-            //Log($"Server: {data}"); // Max length of string
 
             string[] parts = data.Split(',');
 
@@ -191,11 +189,11 @@ namespace D2RApp
                             var s = (D2RScript)scripts[i]; // Next script
                             s.sActions.Sort((a, b) => a.aId.CompareTo(b.aId)); // Sort actions belonging to the current script into ascending order
                         }
-                        Console.WriteLine($"Received scripts from server at {TimeStamp()}");
+                        Log($"Received {scripts.Count} scripts from server at {TimeStamp()}");
                     }
                     catch (Exception ex)
                     {
-                        //Console.WriteLine($"{ex.Message}");
+                        Log($"{ex.Message}");
                     }
                     break;
             }
@@ -213,24 +211,28 @@ namespace D2RApp
             {
                 case (D2RScriptedActionTypes.MouseMove):
                     inputSimulator.Mouse.MoveMouseTo(action.aX * 65535 / (screenWidth + 1), action.aY * 65535 / (screenHeight + 1));
+                    Log($"s:{currentScript.sId} a:{actionIndex} MouseMove: {action.aX}, {action.aY}");
                     break;
 
                 case (D2RScriptedActionTypes.LeftClick):
                     inputSimulator.Mouse.LeftButtonClick();
+                    Log($"s:{currentScript.sId} a:{actionIndex} LeftClick:");
                     break;
 
                 case (D2RScriptedActionTypes.RightClick):
                     inputSimulator.Mouse.RightButtonClick();
+                    Log($"s:{currentScript.sId} a:{actionIndex} RightClick:");
                     break;
 
                 case (D2RScriptedActionTypes.KeyPress):
                     inputSimulator.Keyboard.KeyPress((VirtualKeyCode)action.aKey);
+                    Log($"s:{currentScript.sId} a:{actionIndex} KeyPress: {action.aKey}");
                     break;
 
                 default:
                     break;
             }
-            //Console.WriteLine($"{currentScript.sName}: Executed");
+            Log($"s:{currentScript.sId} a:{actionIndex} completed");
 
             // Queue next action
 
@@ -257,7 +259,7 @@ namespace D2RApp
             connected = true;
             Connection_Button.Text = "Disconnect";
 
-            //Console.WriteLine($"Connected to {peer.EndPoint} at {TimeStamp()}.");
+            Log($"Connected to {peer.EndPoint} at {TimeStamp()}.");
         }
 
         // Lost connection to server
@@ -266,7 +268,7 @@ namespace D2RApp
             Connection_Button.Text = "Connect";
             connected = false;
 
-            //Console.WriteLine($"Disconnected from {peer.EndPoint} at {TimeStamp()}.");
+            Log($"Disconnected from {peer.EndPoint} at {TimeStamp()}.");
         }
 
         // Attempt to disconnect from the server if already connected, otherwise attempt to connect to the server
@@ -284,7 +286,7 @@ namespace D2RApp
                 }
                 catch (Exception ex)
                 {
-                    //Console.WriteLine(ex.Message); // Server could not be reached
+                    Log(ex.Message); // Server could not be reached
                 }
             }
         }
@@ -302,12 +304,22 @@ namespace D2RApp
         }
 
         // Append the given text to the log textbox
-        //private void Log(string text)
-        //{
+        private void Log(string text)
+        {
+            Status_Timer.Stop();
+            Status_Label.Text = text;
+            Status_Timer.Interval = 2000;
+            Status_Timer.Start();
+
         //    Log_TextBox.AppendText(text);
         //    Log_TextBox.AppendText(Environment.NewLine);
         //    Log_TextBox.ScrollToCaret();
-        //}
+        }
 
+        private void Status_Timer_Tick(object sender, EventArgs e)
+        {
+            Status_Label.Text = String.Empty;
+            Status_Timer.Stop();
+        }
     }
 }

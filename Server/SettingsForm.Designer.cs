@@ -33,22 +33,22 @@ namespace D2RServer
             this.Actions_GroupBox = new System.Windows.Forms.GroupBox();
             this.ActionX_TextBox = new System.Windows.Forms.TextBox();
             this.ActionDown_Button = new System.Windows.Forms.Button();
-            this.ActionKey_Button = new System.Windows.Forms.Button();
             this.ActionUp_Button = new System.Windows.Forms.Button();
-            this.ActionY_TextBox = new System.Windows.Forms.TextBox();
-            this.DeleteAction_Button = new System.Windows.Forms.Button();
-            this.ActionDelay_TextBox = new System.Windows.Forms.TextBox();
-            this.Actions_ListBox = new System.Windows.Forms.ListBox();
             this.ActionType_GroupBox = new System.Windows.Forms.GroupBox();
             this.KeyPress_RadioButton = new System.Windows.Forms.RadioButton();
             this.RightClick_RadioButton = new System.Windows.Forms.RadioButton();
             this.LeftClick_RadioButton = new System.Windows.Forms.RadioButton();
             this.MouseMove_RadioButton = new System.Windows.Forms.RadioButton();
-            this.label28 = new System.Windows.Forms.Label();
-            this.NewAction_Button = new System.Windows.Forms.Button();
-            this.label24 = new System.Windows.Forms.Label();
+            this.DeleteAction_Button = new System.Windows.Forms.Button();
+            this.Actions_ListBox = new System.Windows.Forms.ListBox();
+            this.ActionKey_Button = new System.Windows.Forms.Button();
             this.label21 = new System.Windows.Forms.Label();
+            this.ActionDelay_TextBox = new System.Windows.Forms.TextBox();
+            this.NewAction_Button = new System.Windows.Forms.Button();
             this.label25 = new System.Windows.Forms.Label();
+            this.label24 = new System.Windows.Forms.Label();
+            this.ActionY_TextBox = new System.Windows.Forms.TextBox();
+            this.label28 = new System.Windows.Forms.Label();
             this.ScriptDown_Button = new System.Windows.Forms.Button();
             this.Scripts_ListBox = new System.Windows.Forms.ListBox();
             this.DeleteScript_Button = new System.Windows.Forms.Button();
@@ -106,6 +106,7 @@ namespace D2RServer
             // 
             this.ActionX_TextBox.Enabled = false;
             this.ActionX_TextBox.Location = new System.Drawing.Point(118, 206);
+            this.ActionX_TextBox.MaxLength = 5;
             this.ActionX_TextBox.Name = "ActionX_TextBox";
             this.ActionX_TextBox.Size = new System.Drawing.Size(40, 20);
             this.ActionX_TextBox.TabIndex = 113;
@@ -123,17 +124,6 @@ namespace D2RServer
             this.ActionDown_Button.UseVisualStyleBackColor = true;
             this.ActionDown_Button.Click += new System.EventHandler(this.ActionDown_Button_Click);
             // 
-            // ActionKey_Button
-            // 
-            this.ActionKey_Button.Enabled = false;
-            this.ActionKey_Button.Location = new System.Drawing.Point(261, 204);
-            this.ActionKey_Button.Name = "ActionKey_Button";
-            this.ActionKey_Button.Size = new System.Drawing.Size(64, 23);
-            this.ActionKey_Button.TabIndex = 115;
-            this.ActionKey_Button.Text = "Press Key";
-            this.ActionKey_Button.UseVisualStyleBackColor = true;
-            this.ActionKey_Button.Click += new System.EventHandler(this.ActionKey_Button_Click);
-            // 
             // ActionUp_Button
             // 
             this.ActionUp_Button.Enabled = false;
@@ -144,46 +134,6 @@ namespace D2RServer
             this.ActionUp_Button.Text = "Up";
             this.ActionUp_Button.UseVisualStyleBackColor = true;
             this.ActionUp_Button.Click += new System.EventHandler(this.ActionUp_Button_Click);
-            // 
-            // ActionY_TextBox
-            // 
-            this.ActionY_TextBox.Enabled = false;
-            this.ActionY_TextBox.Location = new System.Drawing.Point(184, 206);
-            this.ActionY_TextBox.Name = "ActionY_TextBox";
-            this.ActionY_TextBox.Size = new System.Drawing.Size(40, 20);
-            this.ActionY_TextBox.TabIndex = 114;
-            this.ActionY_TextBox.Text = "0";
-            this.ActionY_TextBox.TextChanged += new System.EventHandler(this.ActionY_TextBox_TextChanged);
-            // 
-            // DeleteAction_Button
-            // 
-            this.DeleteAction_Button.Enabled = false;
-            this.DeleteAction_Button.Location = new System.Drawing.Point(94, 120);
-            this.DeleteAction_Button.Name = "DeleteAction_Button";
-            this.DeleteAction_Button.Size = new System.Drawing.Size(73, 23);
-            this.DeleteAction_Button.TabIndex = 108;
-            this.DeleteAction_Button.Text = "Delete";
-            this.DeleteAction_Button.UseVisualStyleBackColor = true;
-            this.DeleteAction_Button.Click += new System.EventHandler(this.DeleteAction_Button_Click);
-            // 
-            // ActionDelay_TextBox
-            // 
-            this.ActionDelay_TextBox.Enabled = false;
-            this.ActionDelay_TextBox.Location = new System.Drawing.Point(52, 206);
-            this.ActionDelay_TextBox.Name = "ActionDelay_TextBox";
-            this.ActionDelay_TextBox.Size = new System.Drawing.Size(40, 20);
-            this.ActionDelay_TextBox.TabIndex = 112;
-            this.ActionDelay_TextBox.TextChanged += new System.EventHandler(this.ActionDelay_TextBox_TextChanged);
-            // 
-            // Actions_ListBox
-            // 
-            this.Actions_ListBox.FormattingEnabled = true;
-            this.Actions_ListBox.Location = new System.Drawing.Point(6, 19);
-            this.Actions_ListBox.Name = "Actions_ListBox";
-            this.Actions_ListBox.ScrollAlwaysVisible = true;
-            this.Actions_ListBox.Size = new System.Drawing.Size(319, 95);
-            this.Actions_ListBox.TabIndex = 106;
-            this.Actions_ListBox.SelectedIndexChanged += new System.EventHandler(this.Actions_ListBox_SelectedIndexChanged);
             // 
             // ActionType_GroupBox
             // 
@@ -247,14 +197,57 @@ namespace D2RServer
             this.MouseMove_RadioButton.UseVisualStyleBackColor = true;
             this.MouseMove_RadioButton.CheckedChanged += new System.EventHandler(this.MouseMove_CheckedChanged);
             // 
-            // label28
+            // DeleteAction_Button
             // 
-            this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(12, 209);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(34, 13);
-            this.label28.TabIndex = 63;
-            this.label28.Text = "Delay";
+            this.DeleteAction_Button.Enabled = false;
+            this.DeleteAction_Button.Location = new System.Drawing.Point(94, 120);
+            this.DeleteAction_Button.Name = "DeleteAction_Button";
+            this.DeleteAction_Button.Size = new System.Drawing.Size(73, 23);
+            this.DeleteAction_Button.TabIndex = 108;
+            this.DeleteAction_Button.Text = "Delete";
+            this.DeleteAction_Button.UseVisualStyleBackColor = true;
+            this.DeleteAction_Button.Click += new System.EventHandler(this.DeleteAction_Button_Click);
+            // 
+            // Actions_ListBox
+            // 
+            this.Actions_ListBox.FormattingEnabled = true;
+            this.Actions_ListBox.Location = new System.Drawing.Point(6, 19);
+            this.Actions_ListBox.Name = "Actions_ListBox";
+            this.Actions_ListBox.ScrollAlwaysVisible = true;
+            this.Actions_ListBox.Size = new System.Drawing.Size(319, 95);
+            this.Actions_ListBox.TabIndex = 106;
+            this.Actions_ListBox.SelectedIndexChanged += new System.EventHandler(this.Actions_ListBox_SelectedIndexChanged);
+            // 
+            // ActionKey_Button
+            // 
+            this.ActionKey_Button.Enabled = false;
+            this.ActionKey_Button.Location = new System.Drawing.Point(261, 204);
+            this.ActionKey_Button.Name = "ActionKey_Button";
+            this.ActionKey_Button.Size = new System.Drawing.Size(64, 23);
+            this.ActionKey_Button.TabIndex = 115;
+            this.ActionKey_Button.Text = "Press Key";
+            this.ActionKey_Button.UseVisualStyleBackColor = true;
+            this.ActionKey_Button.Click += new System.EventHandler(this.ActionKey_Button_Click);
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(230, 209);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(25, 13);
+            this.label21.TabIndex = 67;
+            this.label21.Text = "Key";
+            // 
+            // ActionDelay_TextBox
+            // 
+            this.ActionDelay_TextBox.Enabled = false;
+            this.ActionDelay_TextBox.Location = new System.Drawing.Point(52, 206);
+            this.ActionDelay_TextBox.MaxLength = 5;
+            this.ActionDelay_TextBox.Name = "ActionDelay_TextBox";
+            this.ActionDelay_TextBox.Size = new System.Drawing.Size(40, 20);
+            this.ActionDelay_TextBox.TabIndex = 112;
+            this.ActionDelay_TextBox.Text = "0";
+            this.ActionDelay_TextBox.TextChanged += new System.EventHandler(this.ActionDelay_TextBox_TextChanged);
             // 
             // NewAction_Button
             // 
@@ -267,6 +260,15 @@ namespace D2RServer
             this.NewAction_Button.UseVisualStyleBackColor = true;
             this.NewAction_Button.Click += new System.EventHandler(this.NewAction_Button_Click);
             // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(164, 209);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(14, 13);
+            this.label25.TabIndex = 65;
+            this.label25.Text = "Y";
+            // 
             // label24
             // 
             this.label24.AutoSize = true;
@@ -276,23 +278,25 @@ namespace D2RServer
             this.label24.TabIndex = 64;
             this.label24.Text = "X";
             // 
-            // label21
+            // ActionY_TextBox
             // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(230, 209);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(25, 13);
-            this.label21.TabIndex = 67;
-            this.label21.Text = "Key";
+            this.ActionY_TextBox.Enabled = false;
+            this.ActionY_TextBox.Location = new System.Drawing.Point(184, 206);
+            this.ActionY_TextBox.MaxLength = 5;
+            this.ActionY_TextBox.Name = "ActionY_TextBox";
+            this.ActionY_TextBox.Size = new System.Drawing.Size(40, 20);
+            this.ActionY_TextBox.TabIndex = 114;
+            this.ActionY_TextBox.Text = "0";
+            this.ActionY_TextBox.TextChanged += new System.EventHandler(this.ActionY_TextBox_TextChanged);
             // 
-            // label25
+            // label28
             // 
-            this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(164, 209);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(14, 13);
-            this.label25.TabIndex = 65;
-            this.label25.Text = "Y";
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(12, 209);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(34, 13);
+            this.label28.TabIndex = 63;
+            this.label28.Text = "Delay";
             // 
             // ScriptDown_Button
             // 
@@ -380,7 +384,7 @@ namespace D2RServer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(604, 312);
+            this.ClientSize = new System.Drawing.Size(596, 304);
             this.ControlBox = false;
             this.Controls.Add(this.Cancel_Button);
             this.Controls.Add(this.Accept_Button);

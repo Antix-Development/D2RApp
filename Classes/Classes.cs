@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace Classes
 {
-        public class D2RConstants
+    public class D2RConstants
     {
         public static string ScriptFileName = "scripts.json";
         public static int DefaultActionDelay = 250;
@@ -43,7 +43,7 @@ namespace Classes
         public int aType { get; set; }
         public int aId { get; set; }
         public int aDelay { get; set; }
-        public int aKey { get; set; }
+        public int aKey { get; set; } // Key
         public int aX { get; set; }
         public int aY { get; set; }
 
