@@ -9,8 +9,7 @@ using System.Collections.Generic;
 
 namespace Classes
 {
-
-    public class D2RConstants
+        public class D2RConstants
     {
         public static string ScriptFileName = "scripts.json";
         public static int DefaultActionDelay = 250;

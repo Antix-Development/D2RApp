@@ -101,7 +101,7 @@ namespace D2RApp
         // A message was received from the server
         private void NetListener_NetworkReceiveEvent(NetPeer peer, NetPacketReader reader, DeliveryMethod deliveryMethod)
         {
-            string data = reader.GetString(1000); // Max data length
+            string data = reader.GetString(); // Max data length
             reader.Recycle();
 
             //Log($"Server: {data}"); // Max length of string

@@ -95,7 +95,7 @@ Press the key you want the "Keypress" action to press. Currently the valid keys 
 
 ### Notes
 
-D2RApp was written to work with my own personal setup which is two separate Windows10 computers, each running one copy of Diablo II Ressurrected in windowed mode. Your mileage may vary wildly with other configurations.
+D2RApp was written to work with my own personal setup which is two separate Windows10 computers, with the same display resolution, with each running one copy of Diablo II Ressurrected in windowed mode. Your mileage will vary wildly with other configurations.
 
 I only have two Diablo II Ressurrected licenses so D2RApp has only been tested working with one slave.
 
@@ -110,6 +110,8 @@ For D2RApp to work it's magic, it employs the following fantastic packages...
 [InputSimulator](https://github.com/michaelnoonan/inputsimulator) - Allows input events to be injected into the system on slave computers.
 
 [Json.NET](https://github.com/JamesNK/Newtonsoft.Json) - Used for transport and persisting of scripts.
+
+Input lag on slave computers will depend entirely on network latency. As of writing this, LiteNetLib is the fastest networking package I could find.
 
 Feel free to fork this repository and make your own crazy creations, just fire me a message.. I'd love to see what other people manage to do with it.
 
