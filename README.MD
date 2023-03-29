@@ -19,6 +19,14 @@ As well as being able to generate input events on slave computers, the master co
 
 <hr>
 
+### What's New?
+
+v1.0.0 (29 Mar 2023)
+
+- Initial public release.
+
+<hr>
+
 ### Installation
 
 D2RApp is portable so just download the latest release and unzip it somewhere.
